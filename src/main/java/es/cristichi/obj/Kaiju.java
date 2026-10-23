@@ -1,6 +1,6 @@
 package es.cristichi.obj;
 
-import es.cristichi.util.Color;
+import java.awt.Color;
 
 public class Kaiju extends GameObject {
     private String species;
@@ -15,6 +15,11 @@ public class Kaiju extends GameObject {
     @Override
     public boolean canBeReplacedBy(GameObject other) {
         return false;
+    }
+
+    @Override
+    public boolean stopsRangedAttacks(GameObject other) {
+        return true;
     }
 
     public String getSpecies() {

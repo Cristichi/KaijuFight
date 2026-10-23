@@ -1,6 +1,6 @@
 package es.cristichi.util;
 
-import es.cristichi.obj.Board.Movement;
+import es.cristichi.obj.game.Board.Movement;
 
 public record Position(int row, int column) {
 

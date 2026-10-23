@@ -1,8 +1,7 @@
 package es.cristichi.obj;
 
+import java.awt.Color;
 import java.util.UUID;
-
-import es.cristichi.util.Color;
 
 /**
  * Represents anything that can be inside a Square in the Board. It includes Players, walls, etc.
@@ -31,6 +30,12 @@ public abstract class GameObject implements Comparable<GameObject> {
      * @return <code>true</code> if this GameObject can be replaced by <code>other</code>, <code>false</code> otherwise.
      */
     public abstract boolean canBeReplacedBy(GameObject other);
+
+    /**
+     * @param other
+     * @return <code>true</code> if this GameObject is an obstacle for ranged attacks (think of a wall), <code>false</code> otherwise.
+     */
+    public abstract boolean stopsRangedAttacks(GameObject other);
 
     @Override
     public int compareTo(GameObject o) {

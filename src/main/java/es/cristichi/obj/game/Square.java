@@ -1,6 +1,8 @@
-package es.cristichi.obj;
+package es.cristichi.obj.game;
 
-import es.cristichi.util.Color;
+import java.awt.Color;
+
+import es.cristichi.obj.GameObject;
 
 public class Square {
     private final char NULLTEXT = '-';
@@ -28,4 +30,10 @@ public class Square {
         return object==null?NULLCOLOR:object.getColorDisplay();
     }
     
+    public boolean canBeMovedTo(Square other){
+        if (other.object == null){
+            return true;
+        }
+        return other.object.canBeReplacedBy(object);
+    }
 }

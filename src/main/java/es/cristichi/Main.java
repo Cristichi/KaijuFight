@@ -1,49 +1,50 @@
 package es.cristichi;
 
-import es.cristichi.obj.Board;
-import es.cristichi.obj.Game;
-import es.cristichi.obj.GameObject;
+import java.awt.Color;
+
+import es.cristichi.obj.Building;
 import es.cristichi.obj.Kaiju;
 import es.cristichi.obj.Player;
 import es.cristichi.obj.StatBlock;
-import es.cristichi.util.Color;
+import es.cristichi.obj.game.Board;
+import es.cristichi.obj.game.Game;
+import es.cristichi.ui.MainWindow;
 import es.cristichi.util.Position;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Starting");
+        System.out.println("Loading");
 
-        Kaiju testKaiju = new Kaiju("test", new StatBlock(1, 1, 1), 'T', null);
+        Kaiju fastKaiju = new Kaiju("test", new StatBlock(2, 1, 1), 'T', Color.YELLOW);
+        Kaiju strongKaiju = new Kaiju("test", new StatBlock(1, 2, 1), 'T', Color.RED);
+        Kaiju mageKaiju = new Kaiju("test", new StatBlock(1, 1, 2), 'T', Color.BLUE);
 
-        Board board = new Board.Builder(3, 3)
+        Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
-            .addSpawnPoint(new Position(2, 0))
-            .addSpawnPoint(new Position(0, 2))
-            .addSpawnPoint(new Position(2, 2))
-            .addObject(new Position(1, 1), new GameObject('X', new Color(0, 0, 0)){
-
-                @Override
-                public boolean canBeReplacedBy(GameObject other) {
-                    return false;
-                }
-                
-            })
+            .addSpawnPoint(new Position(4, 0))
+            .addSpawnPoint(new Position(0, 4))
+            .addSpawnPoint(new Position(4, 4))
+            .addObject(new Position(1, 1), new Building())
+            .addObject(new Position(1, 3), new Building())
+            .addObject(new Position(3, 1), new Building())
+            .addObject(new Position(3, 3), new Building())
             .build();
         
         Player[] players = new Player[]{
-            new Player("Cristichi", 3, false, 'C', testKaiju),
-            new Player("Bot 1", 3, true, '1', testKaiju),
-            new Player("Bot 2", 3, true, '2', testKaiju),
+            new Player("Cristichi", 3, false, 'C', mageKaiju),
+            new Player("Bot 1", 3, true, '1', strongKaiju),
+            new Player("Bot 2", 3, true, '2', fastKaiju),
         };
 
         Game game = new Game(board, players);
         
         System.out.println(game.toString());
-        Thread gameThread = game.readyGame();
+        MainWindow window = new MainWindow(game);
+        
         System.out.println(game.toString());
 
-        gameThread.start();
-
-        System.out.println("Closing");
+        window.setSize(600, 500);
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
     }
 }

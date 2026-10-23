@@ -1,8 +1,11 @@
-package es.cristichi.obj;
+package es.cristichi.obj.game;
 
+import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
+import es.cristichi.obj.GameObject;
+import es.cristichi.obj.Player;
 import es.cristichi.util.Position;
 
 public class Board {
@@ -18,6 +21,18 @@ public class Board {
         }
     }
 
+    public int getRowsLength(){
+        return squares.length;
+    }
+
+    public int getColumnsLength(){
+        return squares.length>0?squares[0].length:0;
+    }
+
+    public Dimension getSize(){
+        return new Dimension(getColumnsLength(), getRowsLength());
+    }
+
     public Square getSquare(Position position){
         return squares[position.row()][position.column()];
     }
@@ -26,7 +41,8 @@ public class Board {
         for (int i = 0; i < squares.length; i++) {
             Square[] row = squares[i];
             for (int j = 0; j < row.length; j++) {
-                if (squares[i][j].getObject().equals(p)){
+                if (squares[i][j].getObject() != null &&
+                    squares[i][j].getObject().equals(p)){
                     return new Position(i, j);
                 }
             }
@@ -34,16 +50,16 @@ public class Board {
         throw new NullPointerException("Player is not on the board!");
     }
 
-    public void forEachRow(Consumer<? super Square[]> action){
-        for (Square[] row : squares) {
-            action.accept(row);
+    public void forEachRow(RowConsumer action){
+        for (int i = 0; i < squares.length; i++) {
+            action.action(i, squares[i]);
         }
     }
 
-    public void forEachSquare(Consumer<? super Square> action){
-        for (Square[] row : squares) {
-            for (Square square : row) {
-                action.accept(square);
+    public void forEachSquare(SquareConsumer action){
+        for (int i = 0; i < squares.length; i++) {
+            for (int j = 0; j < squares[i].length; j++) {
+                action.action(new Position(i, j), squares[i][j]);
             }
         }
     }
@@ -67,7 +83,7 @@ public class Board {
             }
             ret.append("|\n");
         }
-        return ret.toString();
+        return ret.toString().trim();
     }
 
     public static class Builder {
@@ -108,10 +124,11 @@ public class Board {
     }
 
     public static enum Movement {
-        U_UP(0,1),
-        U_RIGHT(1,0),
-        U_DOWN(0,-1),
-        U_LEFT(-1,0);
+        UP(0,-1),
+        RIGHT(1,0),
+        DOWN(0,1),
+        LEFT(-1,0);
+
         private int x,y;
 
         private Movement(int x, int y){
@@ -126,5 +143,13 @@ public class Board {
         public int getY() {
             return y;
         }
+    }
+    
+    public static interface RowConsumer{
+        public void action(int index, Square[] row);
+    }
+    
+    public static interface SquareConsumer{
+        public void action(Position position, Square square);
     }
 }

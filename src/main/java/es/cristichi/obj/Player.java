@@ -1,6 +1,6 @@
 package es.cristichi.obj;
 
-import es.cristichi.util.Color;
+import java.awt.Color;
 
 public class Player extends Kaiju {
     private String nickname;
@@ -33,6 +33,14 @@ public class Player extends Kaiju {
 
     public int getLifes() {
         return lifes;
+    }
+
+    @Override
+    public boolean canBeReplacedBy(GameObject other) {
+        if (other instanceof Player){
+            return false;
+        }
+        return super.canBeReplacedBy(other);
     }
 
 }
