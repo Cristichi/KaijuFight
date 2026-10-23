@@ -16,14 +16,17 @@ import es.cristichi.obj.game.Board;
 
 public class BoardComponent extends JComponent {
     private static final Font GAMEOBJ_DISPLAY_FONT = new Font("Arial", Font.BOLD, 30);
-    private Board cacheBoard;
+    private KaijuGameWindow window;
 
-    public BoardComponent(Board starting){
-        this.cacheBoard = starting;
+    public BoardComponent(KaijuGameWindow window){
+        this.window = window;
     }
 
-    public synchronized void updateBoard(Board updated){
-        this.cacheBoard = updated;
+    public KaijuGameWindow getWindow() {
+        return window;
+    }
+
+    public synchronized void updateBoard(){
         invalidate();
         revalidate();
         repaint();
@@ -32,16 +35,17 @@ public class BoardComponent extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Board board = window.getGame().getBoard();
         if (g instanceof Graphics2D g2d){
             Dimension canvas = getSize();
 
             g2d.setColor(Color.BLACK);
             g2d.fillRect(0, 0, canvas.width, canvas.height);
 
-            Dimension squareSize = new Dimension((int) canvas.getWidth()/cacheBoard.getColumnsLength(), (int) canvas.getHeight()/cacheBoard.getRowsLength());
+            Dimension squareSize = new Dimension((int) canvas.getWidth()/board.getColumnsLength(), (int) canvas.getHeight()/board.getRowsLength());
 
             g2d.setFont(GAMEOBJ_DISPLAY_FONT);
-            cacheBoard.forEachSquare((pos, square) -> {
+            board.forEachSquare((pos, square) -> {
                 if (square.getObject() != null){
                     GameObject gameObject = square.getObject();
                     String str = ""+gameObject.getTextDisplay();

@@ -8,7 +8,7 @@ import es.cristichi.obj.Player;
 import es.cristichi.obj.StatBlock;
 import es.cristichi.obj.game.Board;
 import es.cristichi.obj.game.Game;
-import es.cristichi.ui.MainWindow;
+import es.cristichi.ui.KaijuGameWindow;
 import es.cristichi.util.Position;
 
 public class Main {
@@ -39,12 +39,14 @@ public class Main {
         Game game = new Game(board, players);
         
         System.out.println(game.toString());
-        MainWindow window = new MainWindow(game);
+        KaijuGameWindow window = new KaijuGameWindow(game);
         
         System.out.println(game.toString());
 
         window.setSize(600, 500);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        window.startGame();
     }
 }
