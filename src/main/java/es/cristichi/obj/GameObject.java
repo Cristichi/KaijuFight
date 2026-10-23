@@ -4,7 +4,10 @@ import java.util.UUID;
 
 import es.cristichi.util.Color;
 
-public class GameObject implements Comparable<GameObject> {
+/**
+ * Represents anything that can be inside a Square in the Board. It includes Players, walls, etc.
+ */
+public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
     private char textDisplay;
     private Color colorDisplay;
@@ -22,6 +25,12 @@ public class GameObject implements Comparable<GameObject> {
     public Color getColorDisplay() {
         return colorDisplay;
     }
+
+    /**
+     * @param other
+     * @return <code>true</code> if this GameObject can be replaced by <code>other</code>, <code>false</code> otherwise.
+     */
+    public abstract boolean canBeReplacedBy(GameObject other);
 
     @Override
     public int compareTo(GameObject o) {

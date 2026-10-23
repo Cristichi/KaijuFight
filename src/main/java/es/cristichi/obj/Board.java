@@ -22,6 +22,18 @@ public class Board {
         return squares[position.row()][position.column()];
     }
 
+    public Position getPosition(Player p) {
+        for (int i = 0; i < squares.length; i++) {
+            Square[] row = squares[i];
+            for (int j = 0; j < row.length; j++) {
+                if (squares[i][j].getObject().equals(p)){
+                    return new Position(i, j);
+                }
+            }
+        }
+        throw new NullPointerException("Player is not on the board!");
+    }
+
     public void forEachRow(Consumer<? super Square[]> action){
         for (Square[] row : squares) {
             action.accept(row);
@@ -92,6 +104,27 @@ public class Board {
             }
 
             return new Board(squares, spawns);
+        }
+    }
+
+    public static enum Movement {
+        U_UP(0,1),
+        U_RIGHT(1,0),
+        U_DOWN(0,-1),
+        U_LEFT(-1,0);
+        private int x,y;
+
+        private Movement(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
         }
     }
 }
