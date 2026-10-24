@@ -13,11 +13,11 @@ import es.cristichi.util.Position;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Loading");
+        System.out.println("Kaiju game starting. Check the window.");
 
-        Kaiju fastKaiju = new Kaiju("test", new StatBlock(2, 1, 1, 3), "Spe", Color.YELLOW);
-        Kaiju strongKaiju = new Kaiju("test", new StatBlock(1, 2, 1, 3), "Str", Color.RED);
-        //Kaiju mageKaiju = new Kaiju("test", new StatBlock(1, 1, 2, 3), "Mana", Color.BLUE);
+        Kaiju fastKaiju = new Kaiju("test", new StatBlock(2, 1, 3, 3), "Spe", Color.YELLOW);
+        Kaiju strongKaiju = new Kaiju("test", new StatBlock(1, 2, 3, 3), "Str", Color.RED);
+        Kaiju mageKaiju = new Kaiju("test", new StatBlock(5, 1, 20, 3), "Mana", Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
@@ -31,18 +31,13 @@ public class Main {
             .build();
         
         Player[] players = new Player[]{
-            new Player("Cristichi", false, "Cris", fastKaiju),
+            new Player("Cristichi", false, "Cris", mageKaiju),
             new Player("Bot 1", true, "Bot1", strongKaiju),
             new Player("Bot 2", true, "Bot2", fastKaiju),
         };
 
         Game game = new Game(board, players);
-        
-        System.out.println(game.toString());
         KaijuGameWindow window = new KaijuGameWindow(game);
-        
-        System.out.println(game.toString());
-
         window.setSize(1600, 1000);
         window.setLocationRelativeTo(null);
         window.setVisible(true);

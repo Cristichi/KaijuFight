@@ -66,7 +66,6 @@ public class Game {
     private int round = 0;
     private boolean gameLoop(BoardComponent watcher) throws InterruptedException{
         round++;
-        System.out.printf("%nRound %d.%n", round);
         watcher.getWindow().updateTopText("Round "+round+".");
         watcher.getWindow().showAcceptControls();
         inputSem.acquire();
@@ -77,7 +76,6 @@ public class Game {
             Position pos = board.getPosition(player);
             Square square = board.getSquare(pos);
 
-            System.out.printf("%n[%s] %s's turn!%n", player.isCpu()?"CPU":"HUMAN", player.getNickname());
             watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getNickname());
 
             if (player.isCpu()){
@@ -97,9 +95,7 @@ public class Game {
                         }
                     }
 
-                    if (moves.isEmpty()){
-                        System.out.printf("[CPU] %s is skipping move (no available moves).%n", player.getNickname());
-                    } else {
+                    if (!moves.isEmpty()){
                         Movement movement = moves.get(rng.nextInt(moves.size()));
                         Position nextPos = pos.afterMove(movement);
                         Square moveSquare = board.getSquare(nextPos);
@@ -113,7 +109,6 @@ public class Game {
                             case DOWN -> previousMove = Movement.UP;
                             case LEFT -> previousMove = Movement.RIGHT;
                         }
-                        System.out.printf("[CPU] %s moved %s.%n", player.getNickname(), movement.name());
                         watcher.getWindow().updateTopText("Round "+round+". ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getNickname()+" moved "+movement.name());
                         watcher.getWindow().showAcceptControls();
                         inputSem.acquire();
@@ -122,14 +117,11 @@ public class Game {
                 }
                 // CPU attack TBI
 
-                System.out.println(board.toString());
                 watcher.updateBoard();
             } else {
                 // Player moves
                 for (int i = 0; i < player.getStatBlock().getSpeed(); i++) {
-                    System.out.println(board.toString());
                     watcher.updateBoard();
-                    System.out.printf("[HUMAN] Waiting on move #%d input.%n", i);
                     watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your move #"+(i+1)+".");
                     watcher.getWindow().showMoveControls();
                     boolean needInput = true;
@@ -200,9 +192,7 @@ public class Game {
                     }
                 });
 
-                System.out.println(board.toString());
                 watcher.updateBoard();
-                System.out.printf("[HUMAN] Waiting on attack input.%n");
                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your attack.");
                 watcher.getWindow().showAttackControls(player, possibleAttacks);
                 boolean needInput = true;
@@ -234,8 +224,6 @@ public class Game {
             }
         }
 
-        System.out.printf("%nRound %d finished! Waiting for next round.%nCurrent map:%n", round);
-        System.out.println(board.toString());
         watcher.updateBoard();
         
         watcher.getWindow().updateTopText("Round "+round+". Ended. Waiting to continue.");

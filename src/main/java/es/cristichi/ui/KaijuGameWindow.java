@@ -58,7 +58,6 @@ public class KaijuGameWindow extends JFrame{
             btnAccept.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("OK");
                     KaijuGameWindow.this.game.sendInput(btnAccept);
                 }
             });
@@ -128,7 +127,6 @@ public class KaijuGameWindow extends JFrame{
     }
 
     public void updateTopText(String text){
-        System.out.println("Updating text: "+text);
         currentAction.setText(text);
         boardComponent.revalidate();
         repaint();
