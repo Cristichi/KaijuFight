@@ -165,15 +165,40 @@ public class Game {
                 }
                 // Player attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
-                for (Movement movement : Movement.values()) {
-                    try {
-                        Square moveSquare = board.getSquare(pos.afterMove(movement));
-                        if (moveSquare.getObject() != null && moveSquare.getObject().canBeAttackedBy(AttackType.MELEE, player)){
-                            possibleAttacks.add(new AttackInfo(AttackType.MELEE, moveSquare.getObject()));
+                final Position currentPos = new Position(pos.row(), pos.col());
+                board.forEachSquare((sPos, sSquare) -> {
+                    if (sPos.col() != currentPos.col() && sPos.row() != currentPos.row() && sSquare.getObject() != null){
+                        AttackType type = currentPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
+                        if (sSquare.getObject().canBeAttackedBy(type, player)){
+                            if (type.equals(AttackType.MELEE)){
+                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sSquare.getObject()));
+                            } else {
+                                boolean obstacled = false;
+                                if (sPos.col() == currentPos.col()){
+                                    boolean sLower = sPos.row() < currentPos.row();
+                                    for (int start = (sLower?sPos.row():currentPos.row()); !obstacled && start == (sLower?currentPos.row():sPos.row());start++){
+                                        Square checkObs = board.getSquare(new Position(sPos.col(), start));
+                                        if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
+                                            obstacled = true;
+                                        }
+                                    }
+                                } else if (sPos.row() == currentPos.row()){
+                                    boolean sLower = sPos.col() < currentPos.col();
+                                    for (int start = (sLower?sPos.col():currentPos.col()); !obstacled && start == (sLower?currentPos.col():sPos.col());start++){
+                                        Square checkObs = board.getSquare(new Position(start, sPos.row()));
+                                        if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
+                                            obstacled = true;
+                                        }
+                                    }
+                                }
+                                if (!obstacled){
+                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sSquare.getObject()));
+                                }
+                            }
                         }
-                    }catch (IndexOutOfBoundsException _){
                     }
-                }
+                });
+
                 System.out.println(board.toString());
                 watcher.updateBoard();
                 System.out.printf("[HUMAN] Waiting on attack input.%n");
@@ -195,7 +220,7 @@ public class Game {
                                     needInput = true;
                                 }
                             case MELEE:
-                                AttackResult result = player.attack(attackCommand.type(), attackCommand.objective());
+                                AttackResult result = player.receiveAttack(attackCommand.type(), player.getAttackDamage(attackCommand.type()));
                                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" dealt "
                                     +result.damageToDefender()+" damage to "+attackCommand.objective().getTextDisplay()+".");
                                 watcher.getWindow().showAcceptControls();

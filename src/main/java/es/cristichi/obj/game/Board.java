@@ -34,7 +34,7 @@ public class Board {
     }
 
     public Square getSquare(Position position){
-        return squares[position.row()][position.column()];
+        return squares[position.row()][position.col()];
     }
 
     public Position getPosition(Player p) {
@@ -70,7 +70,7 @@ public class Board {
 
     public void forEachSpawn(Consumer<? super Square> action){
         for (Position spawn : spawns){
-            action.accept(squares[spawn.row()][spawn.column()]);
+            action.accept(squares[spawn.row()][spawn.col()]);
         }
     }
 
@@ -96,7 +96,7 @@ public class Board {
         }
 
         public Builder addObject(Position position, GameObject gameObject){
-            squares[position.row()][position.column()] = new Square(gameObject);
+            squares[position.row()][position.col()] = new Square(gameObject);
             return this;
         }
 

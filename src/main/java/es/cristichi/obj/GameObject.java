@@ -41,10 +41,10 @@ public abstract class GameObject implements Comparable<GameObject> {
     public abstract boolean canBeAttackedBy(AttackType type, GameObject other);
 
     /**
-     * @param other
+     * @param attacker
      * @return <code>true</code> if this GameObject can be attacked, <code>false</code> otherwise.
      */
-    public abstract AttackResult attack(AttackType type, GameObject other);
+    public abstract AttackResult receiveAttack(AttackType type, int quantity);
 
     /**
      * @param other

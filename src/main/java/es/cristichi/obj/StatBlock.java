@@ -19,6 +19,14 @@ public class StatBlock {
         return damage;
     }
 
+    public boolean receiveDamage(int quantity){
+        if (damage >= quantity){
+            damage-=quantity;
+            return true;
+        }
+        return false;
+    }
+
     public int getMana() {
         return mana;
     }

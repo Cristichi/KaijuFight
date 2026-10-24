@@ -23,12 +23,12 @@ public class Building extends GameObject {
 
     @Override
     public boolean canBeAttackedBy(AttackType type, GameObject other) {
-        return false;
+        return type.equals(AttackType.MELEE);
     }
 
     @Override
-    public AttackResult attack(AttackType type, GameObject other) {
-        throw new UnsupportedOperationException("Buildings can't attack.");
+    public AttackResult receiveAttack(AttackType type, int quantity) {
+        return new AttackResult(0, 0);
     }
 
 }

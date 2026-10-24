@@ -5,7 +5,7 @@ import java.awt.Color;
 import es.cristichi.obj.game.AttackResult;
 import es.cristichi.obj.game.AttackType;
 
-public class Kaiju extends GameObject {
+public class Kaiju extends AttackerObject {
     private String species;
     private StatBlock statBlock;
 
@@ -39,7 +39,13 @@ public class Kaiju extends GameObject {
     }
 
     @Override
-    public AttackResult attack(AttackType type, GameObject other) {
-        return new AttackResult(0, statBlock.getDamage());
+    public AttackResult receiveAttack(AttackType type, int quantity) {
+        statBlock.receiveDamage(quantity);
+        return new AttackResult(0, quantity);
+    }
+
+    @Override
+    public int getAttackDamage(AttackType type) {
+        return statBlock.getDamage();
     }
 }

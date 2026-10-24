@@ -50,7 +50,7 @@ public class BoardComponent extends JComponent {
                     GameObject gameObject = square.getObject();
                     String str = ""+gameObject.getTextDisplay();
                     
-                    Rectangle boardSquare = new Rectangle(squareSize.width*pos.column(), squareSize.height*pos.row(), squareSize.width, squareSize.height);
+                    Rectangle boardSquare = new Rectangle(squareSize.width*pos.col(), squareSize.height*pos.row(), squareSize.width, squareSize.height);
 
                     g2d.setColor(gameObject.getColorDisplay());
                     g2d.fillRect(boardSquare.x, boardSquare.y, boardSquare.width, boardSquare.height);
