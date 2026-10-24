@@ -32,6 +32,7 @@ public class Main {
         
         Player[] players = new Player[]{
             new Player("Cristichi", false, "Cris", mageKaiju),
+            new Player("Falso Cris", false, "NoCris", mageKaiju),
             new Player("Bot 1", true, "Bot1", strongKaiju),
             new Player("Bot 2", true, "Bot2", fastKaiju),
         };
