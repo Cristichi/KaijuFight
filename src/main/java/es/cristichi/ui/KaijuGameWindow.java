@@ -68,7 +68,7 @@ public class KaijuGameWindow extends JFrame{
             JPanel moveControls = new JPanel(new FlowLayout());
             JPanel centeredMoveControls = new JPanel(new GridLayout(2, 3));
 
-            JButton btnStay = new JButton("");
+            JButton btnStay = new JButton("Stay");
             btnStay.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

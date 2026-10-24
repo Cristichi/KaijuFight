@@ -148,6 +148,7 @@ public class Game {
                             }
                         } else if (input == null){
                             needInput = false;
+                            i = player.getStatBlock().getSpeed();
                         } else {
                             watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" sent an unknown command.");
                             watcher.getWindow().showMoveControls();
