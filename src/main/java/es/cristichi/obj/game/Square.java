@@ -29,4 +29,9 @@ public class Square {
     public Color getColorDisplay() {
         return object==null?NULLCOLOR:object.getColorDisplay();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Square(%s)", object==null?"":object.getTextDisplay());
+    }
 }

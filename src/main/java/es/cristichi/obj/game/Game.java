@@ -165,26 +165,27 @@ public class Game {
                 }
                 // Player attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
-                final Position currentPos = new Position(pos.row(), pos.col());
+                final Position playerPos = new Position(pos.row(), pos.col());
                 board.forEachSquare((sPos, sSquare) -> {
-                    if (sPos.col() != currentPos.col() && sPos.row() != currentPos.row() && sSquare.getObject() != null){
-                        AttackType type = currentPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
+                    if ((sPos.col() == playerPos.col() || sPos.row() == playerPos.row())
+                        &&(sPos.col() != playerPos.col() || sPos.row() != playerPos.row()) && sSquare.getObject() != null){
+                        AttackType type = playerPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
                         if (sSquare.getObject().canBeAttackedBy(type, player)){
                             if (type.equals(AttackType.MELEE)){
                                 possibleAttacks.add(new AttackInfo(AttackType.MELEE, sSquare.getObject()));
                             } else {
                                 boolean obstacled = false;
-                                if (sPos.col() == currentPos.col()){
-                                    boolean sLower = sPos.row() < currentPos.row();
-                                    for (int start = (sLower?sPos.row():currentPos.row()); !obstacled && start == (sLower?currentPos.row():sPos.row());start++){
+                                if (sPos.col() == playerPos.col()){
+                                    boolean sLower = sPos.row() < playerPos.row();
+                                    for (int start = (sLower?sPos.row():playerPos.row()); !obstacled && start == (sLower?playerPos.row():sPos.row());start++){
                                         Square checkObs = board.getSquare(new Position(sPos.col(), start));
                                         if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
                                             obstacled = true;
                                         }
                                     }
-                                } else if (sPos.row() == currentPos.row()){
-                                    boolean sLower = sPos.col() < currentPos.col();
-                                    for (int start = (sLower?sPos.col():currentPos.col()); !obstacled && start == (sLower?currentPos.col():sPos.col());start++){
+                                } else if (sPos.row() == playerPos.row()){
+                                    boolean sLower = sPos.col() < playerPos.col();
+                                    for (int start = (sLower?sPos.col():playerPos.col()); !obstacled && start == (sLower?playerPos.col():sPos.col());start++){
                                         Square checkObs = board.getSquare(new Position(start, sPos.row()));
                                         if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
                                             obstacled = true;

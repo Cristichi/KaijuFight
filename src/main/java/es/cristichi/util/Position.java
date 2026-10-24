@@ -12,4 +12,9 @@ public record Position(int row, int col) {
         return (row==o.row && (col+1==o.col || col-1==o.col))
                 || (col==o.col && (row+1==o.row || row-1==o.row));
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Pos(%d,%d)", row, col);
+    }
 }
