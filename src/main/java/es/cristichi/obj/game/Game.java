@@ -169,7 +169,7 @@ public class Game {
                                 boolean obstacled = false;
                                 if (sPos.col() == playerPos.col()){
                                     boolean sLower = sPos.row() < playerPos.row();
-                                    for (int start = (sLower?sPos.row():playerPos.row()); !obstacled && start == (sLower?playerPos.row():sPos.row());start++){
+                                    for (int start = (sLower?sPos.row():playerPos.row()); !obstacled && start < (sLower?playerPos.row():sPos.row());start++){
                                         Square checkObs = board.getSquare(new Position(sPos.col(), start));
                                         if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
                                             obstacled = true;
@@ -177,7 +177,7 @@ public class Game {
                                     }
                                 } else if (sPos.row() == playerPos.row()){
                                     boolean sLower = sPos.col() < playerPos.col();
-                                    for (int start = (sLower?sPos.col():playerPos.col()); !obstacled && start == (sLower?playerPos.col():sPos.col());start++){
+                                    for (int start = (sLower?sPos.col():playerPos.col()); !obstacled && start < (sLower?playerPos.col():sPos.col());start++){
                                         Square checkObs = board.getSquare(new Position(start, sPos.row()));
                                         if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
                                             obstacled = true;
