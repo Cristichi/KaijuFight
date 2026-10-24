@@ -13,11 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import es.cristichi.obj.game.Game;
-import es.cristichi.obj.Player;
-import es.cristichi.obj.game.AttackInfo;
-import es.cristichi.obj.game.AttackType;
-import es.cristichi.obj.game.Board.Movement;
+import es.cristichi.game.Game;
+import es.cristichi.game.obj.AttackInfo;
+import es.cristichi.game.obj.AttackType;
+import es.cristichi.game.obj.Player;
+import es.cristichi.game.obj.Board.Movement;
 
 public class KaijuGameWindow extends JFrame{
     private final Thread gameThread;

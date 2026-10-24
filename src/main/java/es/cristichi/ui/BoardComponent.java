@@ -11,9 +11,9 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
-import es.cristichi.obj.GameObject;
-import es.cristichi.obj.Kaiju;
-import es.cristichi.obj.game.Board;
+import es.cristichi.game.GameObject;
+import es.cristichi.game.obj.Board;
+import es.cristichi.game.obj.Kaiju;
 
 public class BoardComponent extends JComponent {
     private static final Font GAMEOBJ_DISPLAY_FONT = new Font("Arial", Font.BOLD, 15);

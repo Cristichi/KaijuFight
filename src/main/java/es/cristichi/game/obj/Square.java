@@ -1,0 +1,37 @@
+package es.cristichi.game.obj;
+
+import java.awt.Color;
+
+import es.cristichi.game.GameObject;
+
+public class Square {
+    private final String NULLTEXT = "-";
+    private final Color NULLCOLOR = new Color(0, 0, 0);
+
+    protected GameObject object;
+
+    public Square(GameObject object) {
+        this.object = object;
+    }
+
+    public void setObject(GameObject object) {
+        this.object = object;
+    }
+
+    public GameObject getObject() {
+        return object;
+    }
+
+    public String getTextDisplay() {
+        return object==null?NULLTEXT:object.getTextDisplay();
+    }
+
+    public Color getColorDisplay() {
+        return object==null?NULLCOLOR:object.getColorDisplay();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Square(%s)", object==null?"":object.getTextDisplay());
+    }
+}

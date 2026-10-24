@@ -2,14 +2,14 @@ package es.cristichi;
 
 import java.awt.Color;
 
-import es.cristichi.obj.Building;
-import es.cristichi.obj.Kaiju;
-import es.cristichi.obj.Player;
-import es.cristichi.obj.StatBlock;
-import es.cristichi.obj.game.Board;
-import es.cristichi.obj.game.Game;
+import es.cristichi.game.Game;
+import es.cristichi.game.obj.Board;
+import es.cristichi.game.obj.Building;
+import es.cristichi.game.obj.Kaiju;
+import es.cristichi.game.obj.Player;
+import es.cristichi.game.obj.Position;
+import es.cristichi.game.obj.StatBlock;
 import es.cristichi.ui.KaijuGameWindow;
-import es.cristichi.util.Position;
 
 public class Main {
     public static void main(String[] args) {
