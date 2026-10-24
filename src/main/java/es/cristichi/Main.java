@@ -17,7 +17,7 @@ public class Main {
 
         Kaiju fastKaiju = new Kaiju("test", new StatBlock(2, 1, 1), 'T', Color.YELLOW);
         Kaiju strongKaiju = new Kaiju("test", new StatBlock(1, 2, 1), 'T', Color.RED);
-        Kaiju mageKaiju = new Kaiju("test", new StatBlock(1, 1, 2), 'T', Color.BLUE);
+        //Kaiju mageKaiju = new Kaiju("test", new StatBlock(1, 1, 2), 'T', Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
@@ -31,7 +31,7 @@ public class Main {
             .build();
         
         Player[] players = new Player[]{
-            new Player("Cristichi", 3, false, 'C', mageKaiju),
+            new Player("Cristichi", 3, false, 'C', fastKaiju),
             new Player("Bot 1", 3, true, '1', strongKaiju),
             new Player("Bot 2", 3, true, '2', fastKaiju),
         };

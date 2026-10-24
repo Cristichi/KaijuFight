@@ -29,11 +29,4 @@ public class Square {
     public Color getColorDisplay() {
         return object==null?NULLCOLOR:object.getColorDisplay();
     }
-    
-    public boolean canBeMovedTo(Square other){
-        if (other.object == null){
-            return true;
-        }
-        return other.object.canBeReplacedBy(object);
-    }
 }

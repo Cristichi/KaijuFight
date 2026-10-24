@@ -2,6 +2,9 @@ package es.cristichi.obj;
 
 import java.awt.Color;
 
+import es.cristichi.obj.game.AttackResult;
+import es.cristichi.obj.game.AttackType;
+
 public class Kaiju extends GameObject {
     private String species;
     private StatBlock statBlock;
@@ -28,5 +31,15 @@ public class Kaiju extends GameObject {
 
     public StatBlock getStatBlock() {
         return statBlock;
+    }
+
+    @Override
+    public boolean canBeAttackedBy(AttackType type, GameObject other) {
+        return true;
+    }
+
+    @Override
+    public AttackResult attack(AttackType type, GameObject other) {
+        return new AttackResult(0, statBlock.getDamage());
     }
 }

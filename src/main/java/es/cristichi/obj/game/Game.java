@@ -81,14 +81,15 @@ public class Game {
             watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getNickname());
 
             if (player.isCpu()){
+                // CPU movement
                 Movement previousMove = null;
-                for (int i = 0; i < player.getStatBlock().speed(); i++) {
+                for (int i = 0; i < player.getStatBlock().getSpeed(); i++) {
                     LinkedList<Movement> moves = new LinkedList<>();
                     for (Movement movement : Movement.values()) {
                         if (!movement.equals(previousMove)){
                             try {
                                 Square moveSquare = board.getSquare(pos.afterMove(movement));
-                                if (square.canBeMovedTo(moveSquare)){
+                                if (moveSquare.getObject() == null || moveSquare.getObject().canBeReplacedBy(player)){
                                     moves.add(movement);
                                 }
                             }catch (IndexOutOfBoundsException _){
@@ -119,14 +120,17 @@ public class Game {
                         input = null;
                     }
                 }
+                // CPU attack TBI
+
                 System.out.println(board.toString());
                 watcher.updateBoard();
             } else {
-                for (int i = 0; i < player.getStatBlock().speed(); i++) {
+                // Player moves
+                for (int i = 0; i < player.getStatBlock().getSpeed(); i++) {
                     System.out.println(board.toString());
                     watcher.updateBoard();
-                    System.out.printf("[HUMAN] Waiting on move input.%n");
-                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your move.");
+                    System.out.printf("[HUMAN] Waiting on move #%d input.%n", i);
+                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your move #"+(i+1)+".");
                     watcher.getWindow().showMoveControls();
                     boolean needInput = true;
                     while(needInput) {
@@ -136,7 +140,7 @@ public class Game {
                             try {
                                 Position nextPos = pos.afterMove(inMove);
                                 Square moveSquare = board.getSquare(nextPos);
-                                if (square.canBeMovedTo(moveSquare)){
+                                if (moveSquare.getObject() == null || moveSquare.getObject().canBeReplacedBy(player)){
                                     square.setObject(null);
                                     moveSquare.setObject(player);
                                     pos = nextPos;
@@ -150,11 +154,57 @@ public class Game {
                                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" can't move to out of bounds. Speedrunners must work harder.");
                                 watcher.getWindow().showMoveControls();
                             }
+                        } else if (input == null){
+                            needInput = false;
+                        } else {
+                            watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" sent an unknown command.");
+                            watcher.getWindow().showMoveControls();
                         }
                         input = null;
                     };
-
                 }
+                // Player attacks
+                LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
+                for (Movement movement : Movement.values()) {
+                    try {
+                        Square moveSquare = board.getSquare(pos.afterMove(movement));
+                        if (moveSquare.getObject() != null && moveSquare.getObject().canBeAttackedBy(AttackType.MELEE, player)){
+                            possibleAttacks.add(new AttackInfo(AttackType.MELEE, moveSquare.getObject()));
+                        }
+                    }catch (IndexOutOfBoundsException _){
+                    }
+                }
+                System.out.println(board.toString());
+                watcher.updateBoard();
+                System.out.printf("[HUMAN] Waiting on attack input.%n");
+                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your attack.");
+                watcher.getWindow().showAttackControls(player, possibleAttacks);
+                boolean needInput = true;
+                while(needInput) {
+                    inputSem.acquire();
+                    watcher.getWindow().removeControls();
+                    if (input instanceof AttackInfo attackCommand){
+                        needInput = false;
+                        switch (attackCommand.type()) {
+                            case NO_ATTACK:
+                                break;
+                            case RANGED:
+                                if (!player.getStatBlock().useMana(1)){
+                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" doesn't have mana to make ranged attacks.");
+                                    watcher.getWindow().showMoveControls();
+                                    needInput = true;
+                                }
+                            case MELEE:
+                                AttackResult result = player.attack(attackCommand.type(), attackCommand.objective());
+                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" dealt "
+                                    +result.damageToDefender()+" damage to "+attackCommand.objective().getTextDisplay()+".");
+                                watcher.getWindow().showAcceptControls();
+                                inputSem.acquire();
+                                break;
+                        }
+                    }
+                    input = null;
+                };
             }
         }
 

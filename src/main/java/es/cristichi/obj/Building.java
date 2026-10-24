@@ -2,6 +2,9 @@ package es.cristichi.obj;
 
 import java.awt.Color;
 
+import es.cristichi.obj.game.AttackResult;
+import es.cristichi.obj.game.AttackType;
+
 public class Building extends GameObject {
 
     public Building() {
@@ -16,6 +19,16 @@ public class Building extends GameObject {
     @Override
     public boolean stopsRangedAttacks(GameObject other) {
         return true;
+    }
+
+    @Override
+    public boolean canBeAttackedBy(AttackType type, GameObject other) {
+        return false;
+    }
+
+    @Override
+    public AttackResult attack(AttackType type, GameObject other) {
+        throw new UnsupportedOperationException("Buildings can't attack.");
     }
 
 }

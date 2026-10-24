@@ -3,8 +3,10 @@ package es.cristichi.ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import es.cristichi.obj.game.Game;
+import es.cristichi.obj.Player;
+import es.cristichi.obj.game.AttackInfo;
+import es.cristichi.obj.game.AttackType;
 import es.cristichi.obj.game.Board.Movement;
 
 public class KaijuGameWindow extends JFrame{
@@ -22,6 +27,7 @@ public class KaijuGameWindow extends JFrame{
     private JPanel controls;
     private CardLayout controlCards;
     private BoardComponent boardComponent;
+    private JPanel attackControls;
 
     public KaijuGameWindow(Game game){
         super("Kaiju Fight!");
@@ -40,37 +46,79 @@ public class KaijuGameWindow extends JFrame{
         controlCards = new CardLayout();
         controls = new JPanel(controlCards);
         add(controls, BorderLayout.SOUTH);
-
-        JPanel noControls = new JPanel(new FlowLayout());
-        JButton btnWaiting = new JButton("Waiting");
-        btnWaiting.setEnabled(false);
-        noControls.add(btnWaiting);
-        controls.add(noControls, "nocontrols");
-
-        JPanel acceptControls = new JPanel(new FlowLayout());
-        JButton btnAccept = new JButton("OK");
-        btnAccept.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("OK");
-                KaijuGameWindow.this.game.sendInput(btnAccept);
-            }
-        });
-        acceptControls.add(btnAccept);
-        controls.add(acceptControls, "accept");
-
-        JPanel moveControls = new JPanel(new FlowLayout());
-        for(Movement move : Movement.values()){
-            JButton btnMove = new JButton(move.name());
-            btnMove.addActionListener(new ActionListener() {
+        {
+            JPanel noControls = new JPanel(new FlowLayout());
+            JLabel lblWaiting = new JLabel("Waiting");
+            noControls.add(lblWaiting);
+            controls.add(noControls, "nocontrols");
+        }
+        {
+            JPanel acceptControls = new JPanel(new BorderLayout());
+            JButton btnAccept = new JButton("OK");
+            btnAccept.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    KaijuGameWindow.this.game.sendInput(move);
+                    System.out.println("OK");
+                    KaijuGameWindow.this.game.sendInput(btnAccept);
                 }
             });
-            moveControls.add(btnMove);
+            acceptControls.add(btnAccept, BorderLayout.CENTER);
+            controls.add(acceptControls, "accept");
         }
-        controls.add(moveControls, "move");
+        {
+            JPanel moveControls = new JPanel(new FlowLayout());
+            JPanel centeredMoveControls = new JPanel(new GridLayout(2, 3));
+
+            JButton btnStay = new JButton("");
+            btnStay.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(null);
+                }
+            });
+            JButton btnUp = new JButton("↑");
+            btnUp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(Movement.UP);
+                }
+            });
+            JButton btnLeft = new JButton("←");
+            btnLeft.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(Movement.LEFT);
+                }
+            });
+            JButton btnDown = new JButton("↓");
+            btnDown.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(Movement.DOWN);
+                }
+            });
+            JButton btnRight = new JButton("→");
+            btnRight.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(Movement.RIGHT);
+                }
+            });
+            
+            centeredMoveControls.add(btnStay);
+            centeredMoveControls.add(btnUp);
+            centeredMoveControls.add(new JPanel());
+            centeredMoveControls.add(btnLeft);
+            centeredMoveControls.add(btnDown);
+            centeredMoveControls.add(btnRight);
+
+            moveControls.add(centeredMoveControls);
+            controls.add(moveControls, "move");
+        }
+        {
+            attackControls = new JPanel(new FlowLayout());
+            controls.add(attackControls, "attack");
+        }
         
         gameThread = this.game.readyGame(boardComponent);
     }
@@ -88,6 +136,7 @@ public class KaijuGameWindow extends JFrame{
 
     public void removeControls(){
         controlCards.show(controls, "nocontrols");
+        attackControls.removeAll();
     }
 
     public void showAcceptControls(){
@@ -99,7 +148,32 @@ public class KaijuGameWindow extends JFrame{
         controlCards.show(controls, "move");
     }
 
+    public void showAttackControls(Player attacker, Collection<AttackInfo> possibleAttacks){
+        attackControls.removeAll();
+        for (AttackInfo info : possibleAttacks) {
+            JButton atk = new JButton((info.type().equals(AttackType.MELEE)?"Melee":"Ranged")+" attack "+info.objective().getTextDisplay());
+            atk.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    KaijuGameWindow.this.game.sendInput(info);
+                }
+            });
+            atk.setEnabled(attacker.getStatBlock().getMana()>0);
+            attackControls.add(atk);
+        }
+        JButton btnNoAttack = new JButton("Don't Attack");
+        btnNoAttack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                KaijuGameWindow.this.game.sendInput(new AttackInfo(AttackType.NO_ATTACK, null));
+            }
+        });
+        attackControls.add(btnNoAttack);
+        controlCards.show(controls, "attack");
+    }
+
     public void startGame(){
         gameThread.start();
     }
+
 }
