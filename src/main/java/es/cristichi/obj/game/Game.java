@@ -221,7 +221,7 @@ public class Game {
                                     needInput = true;
                                 }
                             case MELEE:
-                                AttackResult result = player.receiveAttack(attackCommand.type(), player.getAttackDamage(attackCommand.type()));
+                                AttackResult result = attackCommand.objective().receiveAttack(attackCommand.type(), player.getAttackDamage(attackCommand.type()));
                                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" dealt "
                                     +result.damageToDefender()+" damage to "+attackCommand.objective().getTextDisplay()+".");
                                 watcher.getWindow().showAcceptControls();

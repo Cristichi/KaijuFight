@@ -12,10 +12,11 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
 import es.cristichi.obj.GameObject;
+import es.cristichi.obj.Kaiju;
 import es.cristichi.obj.game.Board;
 
 public class BoardComponent extends JComponent {
-    private static final Font GAMEOBJ_DISPLAY_FONT = new Font("Arial", Font.BOLD, 30);
+    private static final Font GAMEOBJ_DISPLAY_FONT = new Font("Arial", Font.BOLD, 15);
     private KaijuGameWindow window;
 
     public BoardComponent(KaijuGameWindow window){
@@ -38,6 +39,7 @@ public class BoardComponent extends JComponent {
         Board board = window.getGame().getBoard();
         if (g instanceof Graphics2D g2d){
             Dimension canvas = getSize();
+            FontMetrics fm = g2d.getFontMetrics();
 
             g2d.setColor(Color.BLACK);
             g2d.fillRect(0, 0, canvas.width, canvas.height);
@@ -48,23 +50,36 @@ public class BoardComponent extends JComponent {
             board.forEachSquare((pos, square) -> {
                 if (square.getObject() != null){
                     GameObject gameObject = square.getObject();
-                    String str = ""+gameObject.getTextDisplay();
                     
                     Rectangle boardSquare = new Rectangle(squareSize.width*pos.col(), squareSize.height*pos.row(), squareSize.width, squareSize.height);
 
                     g2d.setColor(gameObject.getColorDisplay());
                     g2d.fillRect(boardSquare.x, boardSquare.y, boardSquare.width, boardSquare.height);
 
-                    FontMetrics fm = g2d.getFontMetrics();
-                    Rectangle2D r = fm.getStringBounds(str, g2d);
-                    int x = (int) (boardSquare.x+boardSquare.width/2 - r.getWidth()/2);
-                    int y = (int) (boardSquare.y+boardSquare.height/2 - r.getHeight()/2) + fm.getAscent();
+                    Rectangle2D r = fm.getStringBounds(gameObject.getTextDisplay(), g2d);
+                    int x = (int) (boardSquare.x + boardSquare.width/2 - r.getWidth()/2);
+                    int y = (int) (boardSquare.y + boardSquare.height/2 - r.getHeight()/2) + fm.getAscent();
                     g2d.setColor(Color.BLACK);
-                    g.drawString(str, x-1, y-1);
-                    g2d.setColor(Color.BLACK);
-                    g.drawString(str, x+1, y+1);
-                    g2d.setColor(Color.GREEN);
-                    g.drawString(str, x, y);
+                    g2d.drawString(gameObject.getTextDisplay(), x-1, y+1);
+                    g2d.drawString(gameObject.getTextDisplay(), x+1, y+1);
+                    g2d.drawString(gameObject.getTextDisplay(), x-1, y-1);
+                    g2d.drawString(gameObject.getTextDisplay(), x+1, y-1);
+                    g2d.setColor(Color.WHITE);
+                    g2d.drawString(gameObject.getTextDisplay(), x, y);
+
+                    if (gameObject instanceof Kaiju kaiju){
+                        String hp = "Health: "+kaiju.getHealth();
+                        r = fm.getStringBounds(kaiju.getStatBlock().getDamage()+"", g2d);
+                        x = boardSquare.x+5;
+                        y = (int) (boardSquare.y + r.getHeight()/2) + fm.getAscent();
+                        g2d.setColor(Color.BLACK);
+                        g2d.drawString(hp, x-1, y+1);
+                        g2d.drawString(hp, x+1, y+1);
+                        g2d.drawString(hp, x-1, y-1);
+                        g2d.drawString(hp, x+1, y-1);
+                        g2d.setColor(Color.GREEN);
+                        g2d.drawString(hp, x, y);
+                    }
                 }
             });
         }

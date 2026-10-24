@@ -11,16 +11,16 @@ import es.cristichi.obj.game.AttackType;
  */
 public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
-    private char textDisplay;
+    private String textDisplay;
     private Color colorDisplay;
 
-    public GameObject(char textDisplay, Color colorDisplay) {
+    public GameObject(String textDisplay, Color colorDisplay) {
         uuid = UUID.randomUUID();
         this.textDisplay = textDisplay;
         this.colorDisplay = colorDisplay;
     }
 
-    public char getTextDisplay() {
+    public String getTextDisplay() {
         return textDisplay;
     }
 

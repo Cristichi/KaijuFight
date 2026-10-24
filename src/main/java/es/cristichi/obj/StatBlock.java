@@ -4,11 +4,13 @@ public class StatBlock {
     private int speed;
     private int damage;
     private int mana;
+    private int maxHealth;
 
-    public StatBlock(int speed, int damage, int mana){
+    public StatBlock(int speed, int damage, int mana, int maxLife){
         this.speed = speed;
         this.damage = damage;
         this.mana = mana;
+        this.maxHealth = maxLife;
     }
 
     public int getSpeed() {
@@ -17,14 +19,6 @@ public class StatBlock {
 
     public int getDamage() {
         return damage;
-    }
-
-    public boolean receiveDamage(int quantity){
-        if (damage >= quantity){
-            damage-=quantity;
-            return true;
-        }
-        return false;
     }
 
     public int getMana() {
@@ -37,5 +31,9 @@ public class StatBlock {
             return true;
         }
         return false;
+    }
+    
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }

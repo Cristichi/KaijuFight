@@ -5,7 +5,7 @@ import java.awt.Color;
 import es.cristichi.obj.GameObject;
 
 public class Square {
-    private final char NULLTEXT = '-';
+    private final String NULLTEXT = "-";
     private final Color NULLCOLOR = new Color(0, 0, 0);
 
     protected GameObject object;
@@ -22,7 +22,7 @@ public class Square {
         return object;
     }
 
-    public char getTextDisplay() {
+    public String getTextDisplay() {
         return object==null?NULLTEXT:object.getTextDisplay();
     }
 

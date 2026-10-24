@@ -8,7 +8,7 @@ import es.cristichi.obj.game.AttackType;
 public class Building extends GameObject {
 
     public Building() {
-        super('B', new Color(100, 100, 100));
+        super("Building", new Color(100, 100, 100));
     }
 
     @Override
