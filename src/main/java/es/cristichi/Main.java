@@ -1,8 +1,11 @@
 package es.cristichi;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import es.cristichi.game.Game;
+import es.cristichi.game.io.Resources;
 import es.cristichi.game.obj.Board;
 import es.cristichi.game.obj.Building;
 import es.cristichi.game.obj.Kaiju;
@@ -14,9 +17,15 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Kaiju game starting. Check the window.");
 
-        Kaiju fastKaiju = new Kaiju("test", 2, 1, 3, 3, "Spe", Color.YELLOW);
-        Kaiju strongKaiju = new Kaiju("test", 1, 2, 3, 3, "Str", Color.RED);
-        Kaiju mageKaiju = new Kaiju("test", 5, 1, 20, 3, "Mana", Color.BLUE);
+        BufferedImage mageImage = null;
+        try {
+            mageImage = Resources.loadImage("kaijus/gummy.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Kaiju fastKaiju = new Kaiju("test", 2, 1, 3, 3, "Spe", null, Color.YELLOW);
+        Kaiju strongKaiju = new Kaiju("test", 1, 2, 3, 3, "Str", null, Color.RED);
+        Kaiju mageKaiju = new Kaiju("test", 5, 1, 20, 3, "Mana", mageImage, Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
@@ -38,7 +47,7 @@ public class Main {
 
         Game game = new Game(board, players);
         KaijuGameWindow window = new KaijuGameWindow(game);
-        window.setSize(1600, 1000);
+        window.setSize(1000, 1000);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 

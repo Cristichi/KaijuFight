@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import es.cristichi.game.GameObject;
 
@@ -15,8 +16,8 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     private int mana;
     private int health;
 
-    public Kaiju(String species, int speed, int damage, int mana, int health, String textDisplay, Color colorDisplay) {
-        super(textDisplay, colorDisplay);
+    public Kaiju(String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay) {
+        super(textDisplay, image, colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;

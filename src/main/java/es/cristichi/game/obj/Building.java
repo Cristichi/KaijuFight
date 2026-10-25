@@ -14,7 +14,7 @@ public class Building extends GameObject {
     private int charges;
 
     public Building(int charges) {
-        super("Building", charges>0?MANAED_COLOR:EMPTIED_COLOR);
+        super("Building", null, charges>0?MANAED_COLOR:EMPTIED_COLOR);
         this.charges = charges;
     }
 

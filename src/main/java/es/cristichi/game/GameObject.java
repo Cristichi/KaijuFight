@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 import es.cristichi.game.obj.AttackResult;
@@ -17,11 +18,13 @@ import es.cristichi.game.obj.AttackerObject;
 public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
     protected String textDisplay;
+    protected BufferedImage image;
     protected Color colorDisplay;
 
-    public GameObject(String textDisplay, Color colorDisplay) {
+    public GameObject(String textDisplay, BufferedImage image, Color colorDisplay) {
         uuid = UUID.randomUUID();
         this.textDisplay = textDisplay;
+        this.image = image;
         this.colorDisplay = colorDisplay;
     }
 
@@ -35,6 +38,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 
     public Color getColorDisplay() {
         return colorDisplay;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 
     /**
@@ -69,8 +80,12 @@ public abstract class GameObject implements Comparable<GameObject> {
     public void displayInfo(Graphics2D g2d, Rectangle bounds){
         FontMetrics fm = g2d.getFontMetrics();
         
-        g2d.setColor(colorDisplay);
-        g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        if (image == null){
+            g2d.setColor(colorDisplay);
+            g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        } else {
+            g2d.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
+        }
 
         Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);
         int x = (int) (bounds.x + (bounds.width - textDisplayBounds.getWidth())/2);
