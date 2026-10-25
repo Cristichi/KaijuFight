@@ -1,6 +1,10 @@
 package es.cristichi.game.obj;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import es.cristichi.game.GameObject;
 
@@ -81,5 +85,23 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     @Override
     public AttackResult receiveAttack(AttackType type, AttackerObject attacker, int quantity) {
         return new AttackResult(0, modifyHealth(-quantity)?quantity:0);
+    }
+
+    @Override
+    public void displayInfo(Graphics2D g2d, Rectangle bounds) {
+        super.displayInfo(g2d, bounds);
+        String hp = "Health: "+health;
+        FontMetrics fm = g2d.getFontMetrics();
+        Rectangle2D r = fm.getStringBounds(hp, g2d);
+        int x = bounds.x+5;
+        int y = (int) (bounds.y + r.getHeight()/2) + fm.getAscent();
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(hp, x-1, y+1);
+        g2d.drawString(hp, x+1, y+1);
+        g2d.drawString(hp, x-1, y-1);
+        g2d.drawString(hp, x+1, y-1);
+        g2d.setColor(Color.GREEN);
+        g2d.drawString(hp, x, y);
     }
 }
