@@ -57,7 +57,7 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
 
     @Override
     public boolean modifyMana(int quantity) {
-        int result = mana - quantity;
+        int result = mana + quantity;
         if (result<0){
             return false;
         }
@@ -90,18 +90,34 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     @Override
     public void displayInfo(Graphics2D g2d, Rectangle bounds) {
         super.displayInfo(g2d, bounds);
-        String hp = "Health: "+health;
         FontMetrics fm = g2d.getFontMetrics();
-        Rectangle2D r = fm.getStringBounds(hp, g2d);
-        int x = bounds.x+5;
-        int y = (int) (bounds.y + r.getHeight()/2) + fm.getAscent();
-        
-        g2d.setColor(Color.BLACK);
-        g2d.drawString(hp, x-1, y+1);
-        g2d.drawString(hp, x+1, y+1);
-        g2d.drawString(hp, x-1, y-1);
-        g2d.drawString(hp, x+1, y-1);
-        g2d.setColor(Color.GREEN);
-        g2d.drawString(hp, x, y);
+        {
+            String dHP = "Health: "+health;
+            Rectangle2D strBounds = fm.getStringBounds(dHP, g2d);
+            int x = bounds.x+5;
+            int y = (int) (bounds.y + strBounds.getHeight()/2 + fm.getAscent());
+            
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(dHP, x-1, y+1);
+            g2d.drawString(dHP, x+1, y+1);
+            g2d.drawString(dHP, x-1, y-1);
+            g2d.drawString(dHP, x+1, y-1);
+            g2d.setColor(Color.GREEN);
+            g2d.drawString(dHP, x, y);
+        }
+        {
+            String dMana = "Mana: "+mana;
+            Rectangle2D strBounds = fm.getStringBounds(dMana, g2d);
+            int x = bounds.x+5;
+            int y = (int) (bounds.y - strBounds.getHeight() + fm.getAscent() + bounds.getHeight() -5);
+            
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(dMana, x-1, y+1);
+            g2d.drawString(dMana, x+1, y+1);
+            g2d.drawString(dMana, x-1, y-1);
+            g2d.drawString(dMana, x+1, y-1);
+            g2d.setColor(Color.CYAN);
+            g2d.drawString(dMana, x, y);
+        }
     }
 }
