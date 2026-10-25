@@ -30,7 +30,7 @@ public class Main {
             .build();
         
         Player[] players = new Player[]{
-            new Player("Cristichi", false, "Cris", mageKaiju),
+            new Player("Cristichi", false, "Cristichi el mejor del mundo mundial de los nueve Avernos", mageKaiju),
             new Player("Falso Cris", false, "NoCris", mageKaiju),
             new Player("Bot 1", true, "Bot1", strongKaiju),
             new Player("Bot 2", true, "Bot2", fastKaiju),

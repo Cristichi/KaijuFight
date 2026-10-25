@@ -72,9 +72,9 @@ public abstract class GameObject implements Comparable<GameObject> {
         g2d.setColor(colorDisplay);
         g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
-        Rectangle2D r = fm.getStringBounds(textDisplay, g2d);
-        int x = (int) (bounds.x + bounds.width/2 - r.getWidth()/2);
-        int y = (int) (bounds.y + bounds.height/2 - r.getHeight()/2) + fm.getAscent();
+        Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);
+        int x = (int) (bounds.x + (bounds.width - textDisplayBounds.getWidth())/2);
+        int y = (int) (bounds.y + (bounds.height - textDisplayBounds.getHeight())/2) + fm.getAscent();
 
         g2d.setColor(Color.BLACK);
         g2d.drawString(textDisplay, x-1, y+1);
