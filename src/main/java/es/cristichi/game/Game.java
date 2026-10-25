@@ -36,7 +36,7 @@ public class Game {
         this.board = board;
         this.players = new HashMap<>(players.length);
         for (Player player : players) {
-            this.players.put(player.getNickname(), player);
+            this.players.put(player.getName(), player);
         }
 
         ready = false;
@@ -81,7 +81,7 @@ public class Game {
             Position pos = board.getPosition(player);
             Square square = board.getSquare(pos);
 
-            watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getNickname());
+            watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getName());
 
             if (player.isCpu()){
                 // CPU movement
@@ -114,7 +114,7 @@ public class Game {
                             case DOWN -> previousMove = Movement.UP;
                             case LEFT -> previousMove = Movement.RIGHT;
                         }
-                        watcher.getWindow().updateTopText("Round "+round+". ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getNickname()+" moved "+movement.name());
+                        watcher.getWindow().updateTopText("Round "+round+". ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getName()+" moved "+movement.name());
                         watcher.getWindow().showAcceptControls();
                         inputSem.acquire();
                         input = null;
@@ -127,7 +127,7 @@ public class Game {
                 // Player moves
                 for (int i = 0; i < player.getSpeed(); i++) {
                     watcher.updateBoard();
-                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your move #"+(i+1)+".");
+                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" choose your move #"+(i+1)+".");
                     watcher.getWindow().showMoveControls();
                     boolean needInput = true;
                     while(needInput) {
@@ -144,18 +144,18 @@ public class Game {
                                     square = moveSquare;
                                     needInput = false;
                                 } else {
-                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" can't move to that position.");
+                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" can't move to that position.");
                                     watcher.getWindow().showMoveControls();
                                 }
                             } catch (IndexOutOfBoundsException e){
-                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" can't move to out of bounds. Speedrunners must work harder.");
+                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" can't move to out of bounds. Speedrunners must work harder.");
                                 watcher.getWindow().showMoveControls();
                             }
                         } else if (input == null){
                             needInput = false;
                             i = player.getSpeed();
                         } else {
-                            watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" sent an unknown command.");
+                            watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" sent an unknown command.");
                             watcher.getWindow().showMoveControls();
                         }
                         input = null;
@@ -199,7 +199,7 @@ public class Game {
                 });
 
                 watcher.updateBoard();
-                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your attack.");
+                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" choose your attack.");
                 watcher.getWindow().showAttackControls(player, possibleAttacks);
                 boolean needInput = true;
                 while(needInput) {
@@ -212,14 +212,14 @@ public class Game {
                                 break;
                             case RANGED:
                                 if (!player.modifyMana(-1)){
-                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" doesn't have mana to make ranged attacks.");
+                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" doesn't have mana to make ranged attacks.");
                                     watcher.getWindow().showMoveControls();
                                     needInput = true;
                                 }
                             case MELEE:
                                 AttackResult result = attackCommand.objective().receiveAttack(attackCommand.type(), player, player.getAttackDamage(attackCommand.type()));
-                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" dealt "
-                                    +result.damageToDefender()+" damage to "+attackCommand.objective().getTextDisplay()+".");
+                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" dealt "
+                                    +result.damageToDefender()+" damage to "+attackCommand.objective().getName()+".");
                                 watcher.getWindow().showAcceptControls();
                                 inputSem.acquire();
                                 break;

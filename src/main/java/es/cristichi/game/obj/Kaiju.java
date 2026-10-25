@@ -16,8 +16,8 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     private int mana;
     private int health;
 
-    public Kaiju(String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay) {
-        super(textDisplay, image, colorDisplay);
+    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay) {
+        super(name, textDisplay, image, colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;

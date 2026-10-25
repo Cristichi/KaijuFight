@@ -17,12 +17,14 @@ import es.cristichi.game.obj.AttackerObject;
  */
 public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
+    protected String name;
     protected String textDisplay;
     protected BufferedImage image;
     protected Color colorDisplay;
 
-    public GameObject(String textDisplay, BufferedImage image, Color colorDisplay) {
+    public GameObject(String name, String textDisplay, BufferedImage image, Color colorDisplay) {
         uuid = UUID.randomUUID();
+        this.name = name;
         this.textDisplay = textDisplay;
         this.image = image;
         this.colorDisplay = colorDisplay;
@@ -30,6 +32,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTextDisplay() {
@@ -87,17 +97,19 @@ public abstract class GameObject implements Comparable<GameObject> {
             g2d.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
         }
 
-        Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);
-        int x = (int) (bounds.x + (bounds.width - textDisplayBounds.getWidth())/2);
-        int y = (int) (bounds.y + (bounds.height - textDisplayBounds.getHeight())/2) + fm.getAscent();
+        if (textDisplay != null){
+            Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);
+            int x = (int) (bounds.x + (bounds.width - textDisplayBounds.getWidth())/2);
+            int y = (int) (bounds.y + (bounds.height - textDisplayBounds.getHeight())/2) + fm.getAscent();
 
-        g2d.setColor(Color.BLACK);
-        g2d.drawString(textDisplay, x-1, y+1);
-        g2d.drawString(textDisplay, x+1, y+1);
-        g2d.drawString(textDisplay, x-1, y-1);
-        g2d.drawString(textDisplay, x+1, y-1);
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(textDisplay, x, y);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(textDisplay, x-1, y+1);
+            g2d.drawString(textDisplay, x+1, y+1);
+            g2d.drawString(textDisplay, x-1, y-1);
+            g2d.drawString(textDisplay, x+1, y-1);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(textDisplay, x, y);
+        }
     }
 
     @Override

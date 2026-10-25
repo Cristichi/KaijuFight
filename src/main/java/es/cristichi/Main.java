@@ -23,9 +23,9 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Kaiju fastKaiju = new Kaiju("test", 2, 1, 3, 3, "Spe", null, Color.YELLOW);
-        Kaiju strongKaiju = new Kaiju("test", 1, 2, 3, 3, "Str", null, Color.RED);
-        Kaiju mageKaiju = new Kaiju("test", 5, 1, 20, 3, "Mana", mageImage, Color.BLUE);
+        Kaiju fastKaiju = new Kaiju(null, "test", 2, 1, 3, 3, "Spe", null, Color.YELLOW);
+        Kaiju strongKaiju = new Kaiju(null, "test", 1, 2, 3, 3, "Str", null, Color.RED);
+        Kaiju mageKaiju = new Kaiju(null, "test", 5, 1, 20, 3, "Mana", mageImage, Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))

@@ -149,7 +149,7 @@ public class KaijuGameWindow extends JFrame{
     public void showAttackControls(Player attacker, Collection<AttackInfo> possibleAttacks){
         attackControls.removeAll();
         for (AttackInfo info : possibleAttacks) {
-            JButton atk = new JButton((info.type().equals(AttackType.MELEE)?"Melee":"Ranged")+" attack "+info.objective().getTextDisplay());
+            JButton atk = new JButton("[%s] attack %s".formatted(info.type().equals(AttackType.MELEE)?"Melee":"Ranged", info.objective().getName()));
             atk.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
