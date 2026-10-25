@@ -5,19 +5,24 @@ import java.util.UUID;
 
 import es.cristichi.game.obj.AttackResult;
 import es.cristichi.game.obj.AttackType;
+import es.cristichi.game.obj.AttackerObject;
 
 /**
  * Represents anything that can be inside a Square in the Board. It includes Players, walls, etc.
  */
 public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
-    private String textDisplay;
-    private Color colorDisplay;
+    protected  String textDisplay;
+    protected  Color colorDisplay;
 
     public GameObject(String textDisplay, Color colorDisplay) {
         uuid = UUID.randomUUID();
         this.textDisplay = textDisplay;
         this.colorDisplay = colorDisplay;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getTextDisplay() {
@@ -44,7 +49,7 @@ public abstract class GameObject implements Comparable<GameObject> {
      * @param attacker
      * @return <code>true</code> if this GameObject can be attacked, <code>false</code> otherwise.
      */
-    public abstract AttackResult receiveAttack(AttackType type, int quantity);
+    public abstract AttackResult receiveAttack(AttackType type, AttackerObject attacker, int quantity);
 
     /**
      * @param other

@@ -1,5 +1,6 @@
 package es.cristichi.game.obj;
 
+@Deprecated 
 public class StatBlock {
     private int speed;
     private int damage;

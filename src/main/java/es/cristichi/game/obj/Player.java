@@ -8,19 +8,19 @@ public class Player extends Kaiju {
     private String nickname;
     private boolean cpu;
 
-    public Player(String nickname, boolean cpu, String species, StatBlock statBlock, String textDisplay, Color colorDisplay) {
-        super(species, statBlock, textDisplay, colorDisplay);
+    public Player(String nickname, boolean cpu, String species, int speed, int damage, int mana, int health, String textDisplay, Color colorDisplay) {
+        super(species, speed, damage, mana, health, textDisplay, colorDisplay);
 
         this.nickname = nickname;
         this.cpu = cpu;
     }
 
     public Player(String nickname, boolean cpu, String textDisplay, Kaiju kaiju){
-        this(nickname, cpu, kaiju.getSpecies(), kaiju.getStatBlock(), textDisplay, kaiju.getColorDisplay());
+        this(nickname, cpu, kaiju.getSpecies(), kaiju.getSpeed(), kaiju.getDamage(), kaiju.getMana(), kaiju.getHealth(), textDisplay, kaiju.getColorDisplay());
     }
 
     public Player(String nickname, boolean cpu, Kaiju kaiju){
-        this(nickname, cpu, kaiju.getSpecies(), kaiju.getStatBlock(), kaiju.getTextDisplay(), kaiju.getColorDisplay());
+        this(nickname, cpu, kaiju.getSpecies(), kaiju.getSpeed(), kaiju.getDamage(), kaiju.getMana(), kaiju.getHealth(), kaiju.getTextDisplay(), kaiju.getColorDisplay());
     }
 
     public String getNickname() {

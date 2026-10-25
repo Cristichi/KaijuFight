@@ -156,7 +156,7 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(info);
                 }
             });
-            atk.setEnabled(info.type().equals(AttackType.MELEE) || attacker.getStatBlock().getMana()>0);
+            atk.setEnabled(info.type().equals(AttackType.MELEE) || attacker.getMana()>=1);
             attackControls.add(atk);
         }
         JButton btnNoAttack = new JButton("Don't Attack");

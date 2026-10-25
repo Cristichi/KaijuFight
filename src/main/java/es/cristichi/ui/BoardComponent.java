@@ -69,7 +69,7 @@ public class BoardComponent extends JComponent {
 
                     if (gameObject instanceof Kaiju kaiju){
                         String hp = "Health: "+kaiju.getHealth();
-                        r = fm.getStringBounds(kaiju.getStatBlock().getDamage()+"", g2d);
+                        r = fm.getStringBounds(hp, g2d);
                         x = boardSquare.x+5;
                         y = (int) (boardSquare.y + r.getHeight()/2) + fm.getAscent();
                         g2d.setColor(Color.BLACK);

@@ -4,16 +4,20 @@ import java.awt.Color;
 
 import es.cristichi.game.GameObject;
 
-public class Kaiju extends GameObject implements AttackerObject {
+public class Kaiju extends GameObject implements AttackerObject, ManaUserObject {
     private String species;
-    private StatBlock statBlock;
+    private int speed;
+    private int damage;
+    private int mana;
     private int health;
 
-    public Kaiju(String species, StatBlock statBlock, String textDisplay, Color colorDisplay) {
+    public Kaiju(String species, int speed, int damage, int mana, int health, String textDisplay, Color colorDisplay) {
         super(textDisplay, colorDisplay);
         this.species = species;
-        this.statBlock = statBlock;
-        health = statBlock.getMaxHealth();
+        this.speed = speed;
+        this.damage = damage;
+        this.mana = mana;
+        this.health = health;
     }
 
     @Override
@@ -30,16 +34,39 @@ public class Kaiju extends GameObject implements AttackerObject {
         return species;
     }
 
-    public StatBlock getStatBlock() {
-        return statBlock;
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    @Override
+    public int getAttackDamage(AttackType type) {
+        return damage;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    @Override
+    public boolean modifyMana(int quantity) {
+        int result = mana - quantity;
+        if (result<0){
+            return false;
+        }
+        mana = result;
+        return true;
     }
 
     public int getHealth() {
         return health;
     }
 
-    public boolean receiveDamage(int quantity){
-        health-=quantity;
+    public boolean modifyHealth(int quantity){
+        health+=quantity;
         if (health<=0){
             return true;
         }
@@ -52,13 +79,7 @@ public class Kaiju extends GameObject implements AttackerObject {
     }
 
     @Override
-    public AttackResult receiveAttack(AttackType type, int quantity) {
-        receiveDamage(quantity);
-        return new AttackResult(0, quantity);
-    }
-
-    @Override
-    public int getAttackDamage(AttackType type) {
-        return statBlock.getDamage();
+    public AttackResult receiveAttack(AttackType type, AttackerObject attacker, int quantity) {
+        return new AttackResult(0, modifyHealth(-quantity)?quantity:0);
     }
 }

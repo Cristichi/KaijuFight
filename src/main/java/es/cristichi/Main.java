@@ -8,26 +8,25 @@ import es.cristichi.game.obj.Building;
 import es.cristichi.game.obj.Kaiju;
 import es.cristichi.game.obj.Player;
 import es.cristichi.game.obj.Position;
-import es.cristichi.game.obj.StatBlock;
 import es.cristichi.ui.KaijuGameWindow;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Kaiju game starting. Check the window.");
 
-        Kaiju fastKaiju = new Kaiju("test", new StatBlock(2, 1, 3, 3), "Spe", Color.YELLOW);
-        Kaiju strongKaiju = new Kaiju("test", new StatBlock(1, 2, 3, 3), "Str", Color.RED);
-        Kaiju mageKaiju = new Kaiju("test", new StatBlock(5, 1, 20, 3), "Mana", Color.BLUE);
+        Kaiju fastKaiju = new Kaiju("test", 2, 1, 3, 3, "Spe", Color.YELLOW);
+        Kaiju strongKaiju = new Kaiju("test", 1, 2, 3, 3, "Str", Color.RED);
+        Kaiju mageKaiju = new Kaiju("test", 5, 1, 20, 3, "Mana", Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
             .addSpawnPoint(new Position(4, 0))
             .addSpawnPoint(new Position(0, 4))
             .addSpawnPoint(new Position(4, 4))
-            .addObject(new Position(1, 1), new Building())
-            .addObject(new Position(1, 3), new Building())
-            .addObject(new Position(3, 1), new Building())
-            .addObject(new Position(3, 3), new Building())
+            .addObject(new Position(1, 1), new Building(3))
+            .addObject(new Position(1, 3), new Building(3))
+            .addObject(new Position(3, 1), new Building(3))
+            .addObject(new Position(3, 3), new Building(3))
             .build();
         
         Player[] players = new Player[]{

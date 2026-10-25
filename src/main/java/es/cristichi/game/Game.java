@@ -86,7 +86,7 @@ public class Game {
             if (player.isCpu()){
                 // CPU movement
                 Movement previousMove = null;
-                for (int i = 0; i < player.getStatBlock().getSpeed(); i++) {
+                for (int i = 0; i < player.getSpeed(); i++) {
                     LinkedList<Movement> moves = new LinkedList<>();
                     for (Movement movement : Movement.values()) {
                         if (!movement.equals(previousMove)){
@@ -125,7 +125,7 @@ public class Game {
                 watcher.updateBoard();
             } else {
                 // Player moves
-                for (int i = 0; i < player.getStatBlock().getSpeed(); i++) {
+                for (int i = 0; i < player.getSpeed(); i++) {
                     watcher.updateBoard();
                     watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" choose your move #"+(i+1)+".");
                     watcher.getWindow().showMoveControls();
@@ -153,7 +153,7 @@ public class Game {
                             }
                         } else if (input == null){
                             needInput = false;
-                            i = player.getStatBlock().getSpeed();
+                            i = player.getSpeed();
                         } else {
                             watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" sent an unknown command.");
                             watcher.getWindow().showMoveControls();
@@ -211,13 +211,13 @@ public class Game {
                             case NO_ATTACK:
                                 break;
                             case RANGED:
-                                if (!player.getStatBlock().useMana(1)){
+                                if (!player.modifyMana(-1)){
                                     watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" doesn't have mana to make ranged attacks.");
                                     watcher.getWindow().showMoveControls();
                                     needInput = true;
                                 }
                             case MELEE:
-                                AttackResult result = attackCommand.objective().receiveAttack(attackCommand.type(), player.getAttackDamage(attackCommand.type()));
+                                AttackResult result = attackCommand.objective().receiveAttack(attackCommand.type(), player, player.getAttackDamage(attackCommand.type()));
                                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getNickname()+" dealt "
                                     +result.damageToDefender()+" damage to "+attackCommand.objective().getTextDisplay()+".");
                                 watcher.getWindow().showAcceptControls();
