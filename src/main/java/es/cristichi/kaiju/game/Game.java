@@ -165,7 +165,7 @@ public class Game {
                         AttackType type = playerPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
                         if (sGameObj.canBeAttackedBy(type, player)){
                             if (type.equals(AttackType.MELEE)){
-                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sGameObj));
+                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sPos, sGameObj));
                             } else {
                                 boolean obstacled = false;
                                 if (sPos.col() == playerPos.col()){
@@ -186,7 +186,7 @@ public class Game {
                                     }
                                 }
                                 if (!obstacled){
-                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sGameObj));
+                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sPos, sGameObj));
                                 }
                             }
                         }
@@ -212,9 +212,9 @@ public class Game {
                                     needInput = true;
                                 }
                             case MELEE:
-                                AttackResult result = attackCommand.objective().receiveAttack(attackCommand.type(), player, player.getAttackDamage(attackCommand.type()));
+                                AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), player, player.getAttackDamage(attackCommand.type()));
                                 watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" dealt "
-                                    +result.damageToDefender()+" damage to "+attackCommand.objective().getName()+".");
+                                    +result.damageToDefender()+" damage to "+attackCommand.objGameObject().getName()+".");
                                 watcher.getWindow().showAcceptControls();
                                 inputSem.acquire();
                                 break;
