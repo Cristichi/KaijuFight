@@ -5,9 +5,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 import es.cristichi.kaiju.game.GameObject;
+import es.cristichi.kaiju.game.io.ResourceException;
+import es.cristichi.kaiju.game.io.Resources;
 
 public class Kaiju extends GameObject implements AttackerObject, ManaUserObject {
     private String species;
@@ -17,8 +18,8 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     private int health;
     private boolean cpu;
 
-    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay, boolean cpu) {
-        super(name, textDisplay, image, colorDisplay);
+    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, String imageResource, Color colorDisplay, boolean cpu) throws ResourceException {
+        super(name, textDisplay, imageResource==null?null:Resources.loadImage(imageResource), colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;
