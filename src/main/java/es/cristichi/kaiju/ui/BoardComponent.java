@@ -9,7 +9,6 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-import es.cristichi.kaiju.game.GameObject;
 import es.cristichi.kaiju.game.obj.Board;
 
 public class BoardComponent extends JComponent {
@@ -43,14 +42,13 @@ public class BoardComponent extends JComponent {
 
             Dimension squareSize = new Dimension((int) canvas.getWidth()/board.getColumnsLength(), (int) canvas.getHeight()/board.getRowsLength());
 
-            board.forEachSquare((pos, square) -> {
-                if (square.getObject() != null){
-                    GameObject gameObject = square.getObject();
+            board.forEachSquare((pos, gameObj) -> {
+                if (gameObj != null){
                     Rectangle boardSquare = new Rectangle(squareSize.width*pos.col(), squareSize.height*pos.row(), squareSize.width, squareSize.height);
 
                     g2d.setFont(GAMEOBJ_DISPLAY_FONT);
                     g2d.setColor(Color.BLACK);
-                    gameObject.displayInfo(g2d, boardSquare);
+                    gameObj.displayInfo(g2d, boardSquare);
                 }
             });
         }

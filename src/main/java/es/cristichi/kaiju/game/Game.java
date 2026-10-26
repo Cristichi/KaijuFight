@@ -14,7 +14,6 @@ import es.cristichi.kaiju.game.obj.AttackType;
 import es.cristichi.kaiju.game.obj.Board;
 import es.cristichi.kaiju.game.obj.Player;
 import es.cristichi.kaiju.game.obj.Position;
-import es.cristichi.kaiju.game.obj.Square;
 import es.cristichi.kaiju.game.obj.Board.Movement;
 import es.cristichi.kaiju.ui.BoardComponent;
 
@@ -79,7 +78,6 @@ public class Game {
         for (String playerName : playerOrder) {
             Player player = players.get(playerName);
             Position pos = board.getPosition(player);
-            Square square = board.getSquare(pos);
 
             watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getName());
 
@@ -91,8 +89,8 @@ public class Game {
                     for (Movement movement : Movement.values()) {
                         if (!movement.equals(previousMove)){
                             try {
-                                Square moveSquare = board.getSquare(pos.afterMove(movement));
-                                if (moveSquare.getObject() == null || moveSquare.getObject().canBeReplacedBy(player)){
+                                GameObject moveGO = board.getGameObject(pos.afterMove(movement));
+                                if (moveGO == null || moveGO.canBeReplacedBy(player)){
                                     moves.add(movement);
                                 }
                             }catch (IndexOutOfBoundsException _){
@@ -103,11 +101,9 @@ public class Game {
                     if (!moves.isEmpty()){
                         Movement movement = moves.get(rng.nextInt(moves.size()));
                         Position nextPos = pos.afterMove(movement);
-                        Square moveSquare = board.getSquare(nextPos);
-                        square.setObject(null);
-                        moveSquare.setObject(player);
+                        board.setGameObject(pos, null);
+                        board.setGameObject(nextPos, player);
                         pos = nextPos;
-                        square = moveSquare;
                         switch (movement) {
                             case UP -> previousMove = Movement.DOWN;
                             case RIGHT -> previousMove = Movement.LEFT;
@@ -136,12 +132,11 @@ public class Game {
                         if (input instanceof Movement inMove){
                             try {
                                 Position nextPos = pos.afterMove(inMove);
-                                Square moveSquare = board.getSquare(nextPos);
-                                if (moveSquare.getObject() == null || moveSquare.getObject().canBeReplacedBy(player)){
-                                    square.setObject(null);
-                                    moveSquare.setObject(player);
+                                GameObject moveGO = board.getGameObject(nextPos);
+                                if (moveGO == null || moveGO.canBeReplacedBy(player)){
+                                    board.setGameObject(pos, null);
+                                    board.setGameObject(nextPos, player);
                                     pos = nextPos;
-                                    square = moveSquare;
                                     needInput = false;
                                 } else {
                                     watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" can't move to that position.");
@@ -164,34 +159,34 @@ public class Game {
                 // Player attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
                 final Position playerPos = new Position(pos.row(), pos.col());
-                board.forEachSquare((sPos, sSquare) -> {
+                board.forEachSquare((sPos, sGameObj) -> {
                     if ((sPos.col() == playerPos.col() || sPos.row() == playerPos.row())
-                        &&(sPos.col() != playerPos.col() || sPos.row() != playerPos.row()) && sSquare.getObject() != null){
+                        &&(sPos.col() != playerPos.col() || sPos.row() != playerPos.row()) && sGameObj != null){
                         AttackType type = playerPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
-                        if (sSquare.getObject().canBeAttackedBy(type, player)){
+                        if (sGameObj.canBeAttackedBy(type, player)){
                             if (type.equals(AttackType.MELEE)){
-                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sSquare.getObject()));
+                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sGameObj));
                             } else {
                                 boolean obstacled = false;
                                 if (sPos.col() == playerPos.col()){
                                     boolean sLower = sPos.row() < playerPos.row();
                                     for (int start = (sLower?sPos.row():playerPos.row()); !obstacled && start < (sLower?playerPos.row():sPos.row());start++){
-                                        Square checkObs = board.getSquare(new Position(sPos.col(), start));
-                                        if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
+                                        GameObject checkObs = board.getGameObject(new Position(sPos.col(), start));
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(player)){
                                             obstacled = true;
                                         }
                                     }
                                 } else if (sPos.row() == playerPos.row()){
                                     boolean sLower = sPos.col() < playerPos.col();
                                     for (int start = (sLower?sPos.col():playerPos.col()); !obstacled && start < (sLower?playerPos.col():sPos.col());start++){
-                                        Square checkObs = board.getSquare(new Position(start, sPos.row()));
-                                        if (checkObs.getObject() != null && checkObs.getObject().stopsRangedAttacks(player)){
+                                        GameObject checkObs = board.getGameObject(new Position(start, sPos.row()));
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(player)){
                                             obstacled = true;
                                         }
                                     }
                                 }
                                 if (!obstacled){
-                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sSquare.getObject()));
+                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sGameObj));
                                 }
                             }
                         }
@@ -259,7 +254,7 @@ public class Game {
 
         for (Position spawn : spawns) {
             if (rngNames.hasNext()){
-                board.getSquare(spawn).setObject(players.get(rngNames.next()));
+                board.setGameObject(spawn, players.get(rngNames.next()));
             }
         }
         

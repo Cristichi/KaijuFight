@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 import es.cristichi.kaiju.game.GameObject;
 
 public class Board {
-    protected Square[][] squares;
+    protected GameObject[][] squares;
     protected LinkedList<Position> spawns;
 
-    protected Board(Square[][] squares, LinkedList<Position> spawns){
+    protected Board(GameObject[][] squares, LinkedList<Position> spawns){
         this.squares = squares;
         this.spawns = spawns;
 
@@ -31,16 +31,19 @@ public class Board {
         return new Dimension(getColumnsLength(), getRowsLength());
     }
 
-    public Square getSquare(Position position){
+    public GameObject getGameObject(Position position){
         return squares[position.row()][position.col()];
+    }
+
+    public void setGameObject(Position pos, GameObject gameObject) {
+        squares[pos.row()][pos.col()] = gameObject;
     }
 
     public Position getPosition(Player p) {
         for (int i = 0; i < squares.length; i++) {
-            Square[] row = squares[i];
+            GameObject[] row = squares[i];
             for (int j = 0; j < row.length; j++) {
-                if (squares[i][j].getObject() != null &&
-                    squares[i][j].getObject().equals(p)){
+                if (squares[i][j] != null && squares[i][j].equals(p)){
                     return new Position(i, j);
                 }
             }
@@ -66,7 +69,7 @@ public class Board {
         return spawns;
     }
 
-    public void forEachSpawn(Consumer<? super Square> action){
+    public void forEachSpawn(Consumer<? super GameObject> action){
         for (Position spawn : spawns){
             action.accept(squares[spawn.row()][spawn.col()]);
         }
@@ -75,9 +78,9 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
-        for (Square[] row : squares) {
-            for (Square square : row) {
-                ret.append("|"+square.getTextDisplay());
+        for (GameObject[] row : squares) {
+            for (GameObject square : row) {
+                ret.append("|"+(square==null?" ":square.getName()));
             }
             ret.append("|\n");
         }
@@ -85,16 +88,16 @@ public class Board {
     }
 
     public static class Builder {
-        protected Square[][] squares;
+        protected GameObject[][] squares;
         protected LinkedList<Position> spawns;
 
         public Builder(int rows, int columns){
-            squares = new Square[rows][columns];
+            squares = new GameObject[rows][columns];
             spawns = new LinkedList<>();
         }
 
         public Builder addObject(Position position, GameObject gameObject){
-            squares[position.row()][position.col()] = new Square(gameObject);
+            squares[position.row()][position.col()] = gameObject;
             return this;
         }
 
@@ -106,15 +109,6 @@ public class Board {
         public Board build(){
             if (spawns.size() < 2){
                 throw new IllegalArgumentException("There must be at least 2 spawns for players.");
-            }
-            
-            for (int i = 0; i < squares.length; i++) {
-                Square[] row = squares[i];
-                for (int j = 0; j < row.length; j++) {
-                    if (squares[i][j] == null){
-                        squares[i][j] = new Square(null);
-                    }
-                }
             }
 
             return new Board(squares, spawns);
@@ -144,10 +138,10 @@ public class Board {
     }
     
     public static interface RowConsumer{
-        public void action(int index, Square[] row);
+        public void action(int index, GameObject[] row);
     }
     
     public static interface SquareConsumer{
-        public void action(Position position, Square square);
+        public void action(Position position, GameObject square);
     }
 }
