@@ -12,7 +12,7 @@ import es.cristichi.kaiju.game.obj.AttackInfo;
 import es.cristichi.kaiju.game.obj.AttackResult;
 import es.cristichi.kaiju.game.obj.AttackType;
 import es.cristichi.kaiju.game.obj.Board;
-import es.cristichi.kaiju.game.obj.Player;
+import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.game.obj.Board.Movement;
 import es.cristichi.kaiju.ui.BoardComponent;
@@ -26,16 +26,16 @@ public class Game {
     protected Random rng;
 
     protected Board board;
-    protected HashMap<String, Player> players;
-    protected LinkedList<String> playerOrder;
+    protected HashMap<String, Kaiju> kaijus;
+    protected LinkedList<String> kaijuOrder;
 
-    public Game(Random rng, Board board, Player[] players) {
+    public Game(Random rng, Board board, Kaiju[] kaijus) {
         this.rng = rng;
 
         this.board = board;
-        this.players = new HashMap<>(players.length);
-        for (Player player : players) {
-            this.players.put(player.getName(), player);
+        this.kaijus = new HashMap<>(kaijus.length);
+        for (Kaiju kaiju : kaijus) {
+            this.kaijus.put(kaiju.getName(), kaiju);
         }
 
         ready = false;
@@ -43,12 +43,12 @@ public class Game {
         inputSem = new Semaphore(0);
     }
 
-    public Game(long seed, Board board, Player[] players) {
-        this(new Random(seed), board, players);
+    public Game(long seed, Board board, Kaiju[] kaijus) {
+        this(new Random(seed), board, kaijus);
     }
 
-    public Game(Board board, Player[] players) {
-        this(new Random(), board, players);
+    public Game(Board board, Kaiju[] kaijus) {
+        this(new Random(), board, kaijus);
     }
 
     public Board getBoard() {
@@ -75,22 +75,22 @@ public class Game {
         inputSem.acquire();
         input = null;
         
-        for (String playerName : playerOrder) {
-            Player player = players.get(playerName);
-            Position pos = board.getPosition(player);
+        for (String kaijuName : kaijuOrder) {
+            Kaiju kaiju = kaijus.get(kaijuName);
+            Position pos = board.getPosition(kaiju);
 
-            watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getName());
+            watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(kaiju.isCpu()?"CPU] ":"HUMAN] ")+kaiju.getName());
 
-            if (player.isCpu()){
+            if (kaiju.isCpu()){
                 // CPU movement
                 Movement previousMove = null;
-                for (int i = 0; i < player.getSpeed(); i++) {
+                for (int i = 0; i < kaiju.getSpeed(); i++) {
                     LinkedList<Movement> moves = new LinkedList<>();
                     for (Movement movement : Movement.values()) {
                         if (!movement.equals(previousMove)){
                             try {
                                 GameObject moveGO = board.getGameObject(pos.afterMove(movement));
-                                if (moveGO == null || moveGO.canBeReplacedBy(player)){
+                                if (moveGO == null || moveGO.canBeReplacedBy(kaiju)){
                                     moves.add(movement);
                                 }
                             }catch (IndexOutOfBoundsException _){
@@ -102,7 +102,7 @@ public class Game {
                         Movement movement = moves.get(rng.nextInt(moves.size()));
                         Position nextPos = pos.afterMove(movement);
                         board.setGameObject(pos, null);
-                        board.setGameObject(nextPos, player);
+                        board.setGameObject(nextPos, kaiju);
                         pos = nextPos;
                         switch (movement) {
                             case UP -> previousMove = Movement.DOWN;
@@ -110,7 +110,7 @@ public class Game {
                             case DOWN -> previousMove = Movement.UP;
                             case LEFT -> previousMove = Movement.RIGHT;
                         }
-                        watcher.getWindow().updateTopText("Round "+round+". ["+(player.isCpu()?"CPU] ":"HUMAN] ")+player.getName()+" moved "+movement.name());
+                        watcher.getWindow().updateTopText("Round "+round+". ["+(kaiju.isCpu()?"CPU] ":"HUMAN] ")+kaiju.getName()+" moved "+movement.name());
                         watcher.getWindow().showAcceptControls();
                         inputSem.acquire();
                         input = null;
@@ -120,10 +120,10 @@ public class Game {
 
                 watcher.updateBoard();
             } else {
-                // Player moves
-                for (int i = 0; i < player.getSpeed(); i++) {
+                // Kaiju moves
+                for (int i = 0; i < kaiju.getSpeed(); i++) {
                     watcher.updateBoard();
-                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" choose your move #"+(i+1)+".");
+                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" choose your move #"+(i+1)+".");
                     watcher.getWindow().showMoveControls();
                     boolean needInput = true;
                     while(needInput) {
@@ -133,54 +133,54 @@ public class Game {
                             try {
                                 Position nextPos = pos.afterMove(inMove);
                                 GameObject moveGO = board.getGameObject(nextPos);
-                                if (moveGO == null || moveGO.canBeReplacedBy(player)){
+                                if (moveGO == null || moveGO.canBeReplacedBy(kaiju)){
                                     board.setGameObject(pos, null);
-                                    board.setGameObject(nextPos, player);
+                                    board.setGameObject(nextPos, kaiju);
                                     pos = nextPos;
                                     needInput = false;
                                 } else {
-                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" can't move to that position.");
+                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" can't move to that position.");
                                     watcher.getWindow().showMoveControls();
                                 }
                             } catch (IndexOutOfBoundsException e){
-                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" can't move to out of bounds. Speedrunners must work harder.");
+                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" can't move to out of bounds. Speedrunners must work harder.");
                                 watcher.getWindow().showMoveControls();
                             }
                         } else if (input == null){
                             needInput = false;
-                            i = player.getSpeed();
+                            i = kaiju.getSpeed();
                         } else {
-                            watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" sent an unknown command.");
+                            watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" sent an unknown command.");
                             watcher.getWindow().showMoveControls();
                         }
                         input = null;
                     };
                 }
-                // Player attacks
+                // Kaiju attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
-                final Position playerPos = new Position(pos.row(), pos.col());
+                final Position kaijuPos = new Position(pos.row(), pos.col());
                 board.forEachSquare((sPos, sGameObj) -> {
-                    if ((sPos.col() == playerPos.col() || sPos.row() == playerPos.row())
-                        &&(sPos.col() != playerPos.col() || sPos.row() != playerPos.row()) && sGameObj != null){
-                        AttackType type = playerPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
-                        if (sGameObj.canBeAttackedBy(type, player)){
+                    if ((sPos.col() == kaijuPos.col() || sPos.row() == kaijuPos.row())
+                        &&(sPos.col() != kaijuPos.col() || sPos.row() != kaijuPos.row()) && sGameObj != null){
+                        AttackType type = kaijuPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
+                        if (sGameObj.canBeAttackedBy(type, kaiju)){
                             if (type.equals(AttackType.MELEE)){
                                 possibleAttacks.add(new AttackInfo(AttackType.MELEE, sPos, sGameObj));
                             } else {
                                 boolean obstacled = false;
-                                if (sPos.col() == playerPos.col()){
-                                    boolean sLower = sPos.row() < playerPos.row();
-                                    for (int start = (sLower?sPos.row():playerPos.row()); !obstacled && start < (sLower?playerPos.row():sPos.row());start++){
+                                if (sPos.col() == kaijuPos.col()){
+                                    boolean sLower = sPos.row() < kaijuPos.row();
+                                    for (int start = (sLower?sPos.row():kaijuPos.row()); !obstacled && start < (sLower?kaijuPos.row():sPos.row());start++){
                                         GameObject checkObs = board.getGameObject(new Position(sPos.col(), start));
-                                        if (checkObs != null && checkObs.stopsRangedAttacks(player)){
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
                                             obstacled = true;
                                         }
                                     }
-                                } else if (sPos.row() == playerPos.row()){
-                                    boolean sLower = sPos.col() < playerPos.col();
-                                    for (int start = (sLower?sPos.col():playerPos.col()); !obstacled && start < (sLower?playerPos.col():sPos.col());start++){
+                                } else if (sPos.row() == kaijuPos.row()){
+                                    boolean sLower = sPos.col() < kaijuPos.col();
+                                    for (int start = (sLower?sPos.col():kaijuPos.col()); !obstacled && start < (sLower?kaijuPos.col():sPos.col());start++){
                                         GameObject checkObs = board.getGameObject(new Position(start, sPos.row()));
-                                        if (checkObs != null && checkObs.stopsRangedAttacks(player)){
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
                                             obstacled = true;
                                         }
                                     }
@@ -194,8 +194,8 @@ public class Game {
                 });
 
                 watcher.updateBoard();
-                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" choose your attack.");
-                watcher.getWindow().showAttackControls(player, possibleAttacks);
+                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" choose your attack.");
+                watcher.getWindow().showAttackControls(kaiju, possibleAttacks);
                 boolean needInput = true;
                 while(needInput) {
                     inputSem.acquire();
@@ -206,14 +206,14 @@ public class Game {
                             case NO_ATTACK:
                                 break;
                             case RANGED:
-                                if (!player.modifyMana(-1)){
-                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" doesn't have mana to make ranged attacks.");
+                                if (!kaiju.modifyMana(-1)){
+                                    watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" doesn't have mana to make ranged attacks.");
                                     watcher.getWindow().showMoveControls();
                                     needInput = true;
                                 }
                             case MELEE:
-                                AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), player, player.getAttackDamage(attackCommand.type()));
-                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+player.getName()+" dealt "
+                                AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), kaiju, kaiju.getAttackDamage(attackCommand.type()));
+                                watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" dealt "
                                     +result.damageToDefender()+" damage to "+attackCommand.objGameObject().getName()+".");
                                 watcher.getWindow().showAcceptControls();
                                 inputSem.acquire();
@@ -241,24 +241,24 @@ public class Game {
         }
 
         List<Position> spawns = board.getSpawns();
-        playerOrder = new LinkedList<>(players.keySet());
+        kaijuOrder = new LinkedList<>(kaijus.keySet());
         
-        if (playerOrder.size() > spawns.size()){
-            throw new IllegalArgumentException("Too many players (%d) for the amount of spawns in the Board (%d). Point more spawns or make less friends."
-                .formatted(playerOrder.size(), spawns.size()));
+        if (kaijuOrder.size() > spawns.size()){
+            throw new IllegalArgumentException("Too many kaijus (%d) for the amount of spawns in the Board (%d). Point more spawns or make less friends."
+                .formatted(kaijuOrder.size(), spawns.size()));
         }
 
         Collections.shuffle(spawns, rng);
-        Collections.shuffle(playerOrder, rng);
-        Iterator<String> rngNames = playerOrder.iterator();
+        Collections.shuffle(kaijuOrder, rng);
+        Iterator<String> rngNames = kaijuOrder.iterator();
 
         for (Position spawn : spawns) {
             if (rngNames.hasNext()){
-                board.setGameObject(spawn, players.get(rngNames.next()));
+                board.setGameObject(spawn, kaijus.get(rngNames.next()));
             }
         }
         
-        Collections.shuffle(playerOrder, rng);
+        Collections.shuffle(kaijuOrder, rng);
 
         Thread thread = new Thread(new Runnable() {
             @Override

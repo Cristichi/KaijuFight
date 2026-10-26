@@ -39,7 +39,7 @@ public class Board {
         squares[pos.row()][pos.col()] = gameObject;
     }
 
-    public Position getPosition(Player p) {
+    public Position getPosition(GameObject p) {
         for (int i = 0; i < squares.length; i++) {
             GameObject[] row = squares[i];
             for (int j = 0; j < row.length; j++) {
@@ -48,7 +48,7 @@ public class Board {
                 }
             }
         }
-        throw new NullPointerException("Player is not on the board!");
+        throw new NullPointerException("GameObject is not on the board!");
     }
 
     public void forEachRow(RowConsumer action){

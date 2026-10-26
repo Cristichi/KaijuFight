@@ -9,7 +9,6 @@ import es.cristichi.kaiju.game.io.Resources;
 import es.cristichi.kaiju.game.obj.Board;
 import es.cristichi.kaiju.game.obj.Building;
 import es.cristichi.kaiju.game.obj.Kaiju;
-import es.cristichi.kaiju.game.obj.Player;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.ui.KaijuGameWindow;
 
@@ -23,9 +22,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Kaiju fastKaiju = new Kaiju(null, "test", 2, 1, 3, 3, "Spe", null, Color.YELLOW);
-        Kaiju strongKaiju = new Kaiju(null, "test", 1, 2, 3, 3, "Str", null, Color.RED);
-        Kaiju mageKaiju = new Kaiju(null, "test", 5, 1, 20, 3, "Mana", mageImage, Color.BLUE);
 
         Board board = new Board.Builder(5, 5)
             .addSpawnPoint(new Position(0, 0))
@@ -38,11 +34,11 @@ public class Main {
             .addObject(new Position(3, 3), new Building(3))
             .build();
         
-        Player[] players = new Player[]{
-            new Player("Cristichi", false, "Cristichi el mejor del mundo mundial de los nueve Avernos", mageKaiju),
-            new Player("Falso Cris", false, "NoCris", mageKaiju),
-            new Player("Bot 1", true, "Bot1", strongKaiju),
-            new Player("Bot 2", true, "Bot2", fastKaiju),
+        Kaiju[] players = new Kaiju[]{
+            new Kaiju("Cristichi", "Gummy", 1, 1, 3, 3, "Cristichi", mageImage, Color.BLUE, false),
+            new Kaiju("NoCris", "Gummy", 1, 1, 3, 3, "Falso Cristichi", mageImage, Color.BLUE, false),
+            new Kaiju("Bot 1", "strong", 1, 2, 3, 3, "Strengther", null, Color.RED, true),
+            new Kaiju("Bot 2", "fast", 2, 1, 3, 3, "Speeder", null, Color.YELLOW, true)
         };
 
         Game game = new Game(board, players);

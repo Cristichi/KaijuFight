@@ -15,14 +15,16 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     private int damage;
     private int mana;
     private int health;
+    private boolean cpu;
 
-    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay) {
+    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, BufferedImage image, Color colorDisplay, boolean cpu) {
         super(name, textDisplay, image, colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;
         this.mana = mana;
         this.health = health;
+        this.cpu = cpu;
     }
 
     @Override
@@ -76,6 +78,10 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
             return true;
         }
         return false;
+    }
+    
+    public boolean isCpu() {
+        return cpu;
     }
 
     @Override

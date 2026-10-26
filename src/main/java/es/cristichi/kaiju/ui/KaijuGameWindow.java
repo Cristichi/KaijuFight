@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import es.cristichi.kaiju.game.Game;
 import es.cristichi.kaiju.game.obj.AttackInfo;
 import es.cristichi.kaiju.game.obj.AttackType;
-import es.cristichi.kaiju.game.obj.Player;
+import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Board.Movement;
 
 public class KaijuGameWindow extends JFrame{
@@ -146,7 +146,7 @@ public class KaijuGameWindow extends JFrame{
         controlCards.show(controls, "move");
     }
 
-    public void showAttackControls(Player attacker, Collection<AttackInfo> possibleAttacks){
+    public void showAttackControls(Kaiju attacker, Collection<AttackInfo> possibleAttacks){
         attackControls.removeAll();
         for (AttackInfo info : possibleAttacks) {
             JButton atk = new JButton("[%s] attack %s (%d,%d)"
