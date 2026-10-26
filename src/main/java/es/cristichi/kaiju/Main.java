@@ -37,8 +37,8 @@ public class Main {
         Kaiju[] players = new Kaiju[]{
             new Kaiju("Cristichi", "Gummy", 1, 1, 3, 3, "Cristichi", mageImage, Color.BLUE, false),
             new Kaiju("NoCris", "Gummy", 1, 1, 3, 3, "Falso Cristichi", mageImage, Color.BLUE, false),
-            new Kaiju("Bot 1", "strong", 1, 2, 3, 3, "Strengther", null, Color.RED, true),
-            new Kaiju("Bot 2", "fast", 2, 1, 3, 3, "Speeder", null, Color.YELLOW, true)
+            new Kaiju("Bot 1", "strong", 1, 2, 1, 3, "Strengther", null, Color.RED, true),
+            new Kaiju("Bot 2", "fast", 2, 1, 1, 3, "Speeder", null, Color.YELLOW, true)
         };
 
         Game game = new Game(board, players);
