@@ -170,7 +170,7 @@ public class Game {
                                 boolean obstacled = false;
                                 if (sPos.col() == kaijuPos.col()){
                                     boolean sLower = sPos.row() < kaijuPos.row();
-                                    for (int start = (sLower?sPos.row():kaijuPos.row()); !obstacled && start < (sLower?kaijuPos.row():sPos.row());start++){
+                                    for (int start = 1+(sLower?sPos.row():kaijuPos.row()); !obstacled && start < (sLower?kaijuPos.row():sPos.row()); start++){
                                         GameObject checkObs = board.getGameObject(new Position(sPos.col(), start));
                                         if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
                                             obstacled = true;
@@ -178,7 +178,7 @@ public class Game {
                                     }
                                 } else if (sPos.row() == kaijuPos.row()){
                                     boolean sLower = sPos.col() < kaijuPos.col();
-                                    for (int start = (sLower?sPos.col():kaijuPos.col()); !obstacled && start < (sLower?kaijuPos.col():sPos.col());start++){
+                                    for (int start = 1+(sLower?sPos.col():kaijuPos.col()); !obstacled && start < (sLower?kaijuPos.col():sPos.col()); start++){
                                         GameObject checkObs = board.getGameObject(new Position(start, sPos.row()));
                                         if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
                                             obstacled = true;
