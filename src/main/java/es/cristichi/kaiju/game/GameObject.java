@@ -124,4 +124,9 @@ public abstract class GameObject implements Comparable<GameObject> {
         }
         return super.equals(obj);
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
