@@ -76,9 +76,9 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     public boolean modifyHealth(int quantity){
         health+=quantity;
         if (health<=0){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     
     public boolean isCpu() {
