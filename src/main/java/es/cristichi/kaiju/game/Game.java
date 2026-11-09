@@ -75,17 +75,17 @@ public class Game {
     private int round = 0;
     private boolean gameLoop(BoardComponent watcher) throws InterruptedException{
         round++;
-        watcher.getWindow().updateTopText("Round "+round+".");
-        watcher.getWindow().showAcceptControls();
-        inputSem.acquire();
-        input = null;
         
         for (String kaijuName : kaijuOrder) {
             currentTurn = kaijuName;
             Kaiju kaiju = kaijus.get(kaijuName);
             Position pos = board.getPosition(kaiju);
-
+        
             watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(kaiju.isCpu()?"CPU] ":"HUMAN] ")+kaiju.getName());
+            watcher.getWindow().showAcceptControls();
+            inputSem.acquire();
+            input = null;
+
 
             if (kaiju.isCpu()){
                 // CPU movement
@@ -232,11 +232,6 @@ public class Game {
         }
 
         watcher.updateBoard();
-        
-        watcher.getWindow().updateTopText("Round "+round+". Ended. Waiting to continue.");
-        watcher.getWindow().showAcceptControls();
-        inputSem.acquire();
-        input = null;
 
         return round<30;
     }
