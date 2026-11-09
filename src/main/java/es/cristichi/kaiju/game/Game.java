@@ -76,7 +76,6 @@ public class Game {
     private boolean gameLoop(BoardComponent watcher) throws InterruptedException{
         round++;
         
-        LinkedList<String> alive = new LinkedList<>();
         gameloop:
         for (String kaijuName : kaijuOrder) {
             currentTurn = kaijuName;
@@ -88,7 +87,6 @@ public class Game {
                 watcher.getWindow().showAcceptControls();
                 inputSem.acquire();
                 input = null;
-                alive.add(kaijuName);
             } else {
                 watcher.getWindow().updateTopText("Round %d. Skipping [%s] %s's turn (ELIMINATED)".formatted(round, (kaiju.isCpu()?"CPU":"HUMAN"), kaiju.getName()));
                 watcher.getWindow().showAcceptControls();
@@ -288,20 +286,27 @@ public class Game {
                     input = null;
                 };
             }
+
+            
+            LinkedList<String> alive = new LinkedList<>();
+            for (String kaijuChecked : kaijuOrder) {
+                if (kaijus.get(kaijuChecked).isAlive()){
+                    alive.add(kaijuChecked);
+                }
+            }
+            if (alive.size()==1){
+                Kaiju winner = kaijus.get(alive.get(0));
+                watcher.getWindow().updateTopText("And the winner is [%s] %s!".formatted((winner.isCpu()?"CPU":"HUMAN"), winner.getName()));
+                watcher.getWindow().removeControls();
+                return false;
+            } else if (alive.size()<=0){
+                watcher.getWindow().updateTopText("What? Well, Nobody wins!!");
+                watcher.getWindow().removeControls();
+                return false;
+            }
         }
 
         watcher.updateBoard();
-
-        if (alive.size()==1){
-            Kaiju winner = kaijus.get(alive.get(0));
-            watcher.getWindow().updateTopText("And the winner is [%s] %s!".formatted((winner.isCpu()?"CPU":"HUMAN"), winner.getName()));
-            watcher.getWindow().removeControls();
-            return false;
-        } else if (alive.size()<=0){
-            watcher.getWindow().updateTopText("What? Well, Nobody wins!!");
-            watcher.getWindow().removeControls();
-            return false;
-        }
         return true;
     }
 
