@@ -28,6 +28,7 @@ public class Game {
     protected Board board;
     protected HashMap<String, Kaiju> kaijus;
     protected LinkedList<String> kaijuOrder;
+    protected String currentTurn;
 
     public Game(Random rng, Board board, Kaiju[] kaijus) {
         this.rng = rng;
@@ -62,6 +63,10 @@ public class Game {
         this.input = input;
         inputSem.release();
     }
+
+    public Kaiju getCurrentTurnKaiju() {
+        return kaijus.get(currentTurn);
+    }
     
     /**
      * 
@@ -76,6 +81,7 @@ public class Game {
         input = null;
         
         for (String kaijuName : kaijuOrder) {
+            currentTurn = kaijuName;
             Kaiju kaiju = kaijus.get(kaijuName);
             Position pos = board.getPosition(kaiju);
 

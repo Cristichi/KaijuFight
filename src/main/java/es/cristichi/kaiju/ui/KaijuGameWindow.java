@@ -38,10 +38,14 @@ public class KaijuGameWindow extends JFrame{
         setLayout(new BorderLayout());
 
         currentAction = new JLabel("Loading");
+        currentAction.setHorizontalAlignment(JLabel.CENTER);
         add(currentAction, BorderLayout.NORTH);
 
         boardComponent = new BoardComponent(this);
         add(boardComponent, BorderLayout.CENTER);
+
+        add(new JPanel(), BorderLayout.WEST);
+        add(new JPanel(), BorderLayout.EAST);
 
         controlCards = new CardLayout();
         controls = new JPanel(controlCards);

@@ -40,7 +40,7 @@ public class Main {
 
         Game game = new Game(board, players);
         KaijuGameWindow window = new KaijuGameWindow(game);
-        window.setSize(1000, 1000);
+        window.setSize(1600, 1000);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
