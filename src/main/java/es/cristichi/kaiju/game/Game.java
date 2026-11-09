@@ -88,7 +88,7 @@ public class Game {
 
 
             if (kaiju.isCpu()){
-                // CPU movement
+                // CPU moves
                 Movement previousMove = null;
                 for (int i = 0; i < kaiju.getSpeed(); i++) {
                     LinkedList<Movement> moves = new LinkedList<>();
@@ -122,11 +122,57 @@ public class Game {
                         input = null;
                     }
                 }
-                // CPU attack TBI
+                
+                // CPU attacks
+                LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
+                final Position kaijuPos = new Position(pos.row(), pos.col());
+                board.forEachSquare((sPos, sGameObj) -> {
+                    if ((sPos.col() == kaijuPos.col() || sPos.row() == kaijuPos.row())
+                        &&(sPos.col() != kaijuPos.col() || sPos.row() != kaijuPos.row()) && sGameObj != null){
+                        AttackType type = kaijuPos.isOrtogonalMelee(sPos)?AttackType.MELEE:AttackType.RANGED;
+                        if (sGameObj.canBeAttackedBy(type, kaiju)){
+                            if (type.equals(AttackType.MELEE)){
+                                possibleAttacks.add(new AttackInfo(AttackType.MELEE, sPos, sGameObj));
+                            } else if (kaiju.getMana()>0){
+                                boolean obstacled = false;
+                                if (sPos.col() == kaijuPos.col()){
+                                    boolean sLower = sPos.row() < kaijuPos.row();
+                                    for (int start = 1+(sLower?sPos.row():kaijuPos.row()); !obstacled && start < (sLower?kaijuPos.row():sPos.row()); start++){
+                                        GameObject checkObs = board.getGameObject(new Position(sPos.col(), start));
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
+                                            obstacled = true;
+                                        }
+                                    }
+                                } else if (sPos.row() == kaijuPos.row()){
+                                    boolean sLower = sPos.col() < kaijuPos.col();
+                                    for (int start = 1+(sLower?sPos.col():kaijuPos.col()); !obstacled && start < (sLower?kaijuPos.col():sPos.col()); start++){
+                                        GameObject checkObs = board.getGameObject(new Position(start, sPos.row()));
+                                        if (checkObs != null && checkObs.stopsRangedAttacks(kaiju)){
+                                            obstacled = true;
+                                        }
+                                    }
+                                }
+                                if (!obstacled){
+                                    possibleAttacks.add(new AttackInfo(AttackType.RANGED, sPos, sGameObj));
+                                }
+                            }
+                        }
+                    }
+                });
+
+                watcher.updateBoard();
+                
+                AttackInfo attackCommand = possibleAttacks.get(rng.nextInt(possibleAttacks.size()));
+                AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), kaiju, kaiju.getAttackDamage(attackCommand.type()));
+                
+                watcher.getWindow().updateTopText("Round "+round+". [CPU] "+kaiju.getName()+" dealt "
+                    +result.damageToDefender()+" damage to "+attackCommand.objGameObject().getName()+".");
+                watcher.getWindow().showAcceptControls();
+                inputSem.acquire();
 
                 watcher.updateBoard();
             } else {
-                // Kaiju moves
+                // Player kaiju moves
                 for (int i = 0; i < kaiju.getSpeed(); i++) {
                     watcher.updateBoard();
                     watcher.getWindow().updateTopText("Round "+round+". [HUMAN] "+kaiju.getName()+" choose your move #"+(i+1)+".");
@@ -162,7 +208,7 @@ public class Game {
                         input = null;
                     };
                 }
-                // Kaiju attacks
+                // Player kaiju attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
                 final Position kaijuPos = new Position(pos.row(), pos.col());
                 board.forEachSquare((sPos, sGameObj) -> {
