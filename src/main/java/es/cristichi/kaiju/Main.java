@@ -17,8 +17,8 @@ public class Main {
         Kaiju[] players;
         try {
             players = new Kaiju[]{
-                new Kaiju("Cristichi", "Gummy", 1, 1, 3, 3, "Cristichi", "kaijus/gummy.png", Color.MAGENTA, false),
-                new Kaiju("NoCris", "Gummy", 1, 1, 3, 3, "Falso Cristichi", "kaijus/gummy.png", Color.BLUE, true),
+                new Kaiju("Cristichi", "gummy", 1, 1, 3, 3, "Cristichi", "kaijus/gummy.png", Color.MAGENTA, false),
+                new Kaiju("Snail", "snail", 1, 1, 3, 3, "Random Snail", "kaijus/snail.png", Color.BLUE, true),
                 new Kaiju("Strong Bot", "strong", 1, 2, 1, 3, "Strengther", "kaijus/robot.png", Color.RED, true),
                 new Kaiju("Fast Bot", "fast", 2, 1, 1, 3, "Speeder", "kaijus/robot.png", Color.YELLOW, true)
             };
