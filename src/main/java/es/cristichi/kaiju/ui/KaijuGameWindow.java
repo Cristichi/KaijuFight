@@ -62,7 +62,10 @@ public class KaijuGameWindow extends JFrame{
             btnAccept.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    KaijuGameWindow.this.game.sendInput(btnAccept);
+                    try {
+                        KaijuGameWindow.this.game.sendInput(btnAccept);
+                    }catch (IllegalStateException _){
+                    }
                 }
             });
             acceptControls.add(btnAccept, BorderLayout.CENTER);

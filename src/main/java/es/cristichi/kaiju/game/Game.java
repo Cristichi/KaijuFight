@@ -76,6 +76,7 @@ public class Game {
     private boolean gameLoop(BoardComponent watcher) throws InterruptedException{
         round++;
         
+        LinkedList<String> alive = new LinkedList<>();
         gameloop:
         for (String kaijuName : kaijuOrder) {
             currentTurn = kaijuName;
@@ -87,6 +88,7 @@ public class Game {
                 watcher.getWindow().showAcceptControls();
                 inputSem.acquire();
                 input = null;
+                alive.add(kaijuName);
             } else {
                 watcher.getWindow().updateTopText("Round %d. Skipping [%s] %s's turn (ELIMINATED)".formatted(round, (kaiju.isCpu()?"CPU":"HUMAN"), kaiju.getName()));
                 watcher.getWindow().showAcceptControls();
@@ -169,12 +171,15 @@ public class Game {
                 });
 
                 watcher.updateBoard();
-                
-                AttackInfo attackCommand = possibleAttacks.get(rng.nextInt(possibleAttacks.size()));
-                AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), kaiju, kaiju.getAttackDamage(attackCommand.type()));
-                
-                watcher.getWindow().updateTopText("Round "+round+". [CPU] "+kaiju.getName()+" dealt "
-                    +result.damageToDefender()+" damage to "+attackCommand.objGameObject().getName()+".");
+                if (possibleAttacks.isEmpty()){
+                    watcher.getWindow().updateTopText("Round "+round+". [CPU] "+kaiju.getName()+" can't attack anything.");
+                } else {
+                    AttackInfo attackCommand = possibleAttacks.get(rng.nextInt(possibleAttacks.size()));
+                    AttackResult result = attackCommand.objGameObject().receiveAttack(attackCommand.type(), kaiju, kaiju.getAttackDamage(attackCommand.type()));
+                    
+                    watcher.getWindow().updateTopText("Round "+round+". [CPU] "+kaiju.getName()+" dealt "
+                        +result.damageToDefender()+" damage to "+attackCommand.objGameObject().getName()+".");
+                }
                 watcher.getWindow().showAcceptControls();
                 inputSem.acquire();
 
@@ -287,7 +292,17 @@ public class Game {
 
         watcher.updateBoard();
 
-        return round<30;
+        if (alive.size()==1){
+            Kaiju winner = kaijus.get(alive.get(0));
+            watcher.getWindow().updateTopText("And the winner is [%s] %s!".formatted((winner.isCpu()?"CPU":"HUMAN"), winner.getName()));
+            watcher.getWindow().removeControls();
+            return false;
+        } else if (alive.size()<=0){
+            watcher.getWindow().updateTopText("What? Well, Nobody wins!!");
+            watcher.getWindow().removeControls();
+            return false;
+        }
+        return true;
     }
 
     public Thread readyGame(BoardComponent watcher){
