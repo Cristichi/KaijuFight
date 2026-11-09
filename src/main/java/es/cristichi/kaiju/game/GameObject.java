@@ -83,19 +83,26 @@ public abstract class GameObject implements Comparable<GameObject> {
     public abstract boolean stopsRangedAttacks(GameObject other);
 
     /**
-     * It enables information to be drawn inside the designated space for this GameObject.
-     * @param g2d Graphics used to draw
-     * @param bounds The designated space for this GameObject. Try to draw inside this bounds.
+     * 
+     * @param g2d
+     * @param bounds
      */
-    public void displayInfo(Graphics2D g2d, Rectangle bounds){
-        FontMetrics fm = g2d.getFontMetrics();
-        
+    public void paintObject(Graphics2D g2d, Rectangle bounds){
         if (image == null){
             g2d.setColor(colorDisplay);
             g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
         } else {
             g2d.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
         }
+    }
+
+    /**
+     * It enables information to be drawn inside the designated space for this GameObject.
+     * @param g2d Graphics used to draw
+     * @param bounds The designated space for this GameObject. Try to draw inside this bounds.
+     */
+    public void displayInfo(Graphics2D g2d, Rectangle bounds){
+        FontMetrics fm = g2d.getFontMetrics();
 
         if (textDisplay != null){
             Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);

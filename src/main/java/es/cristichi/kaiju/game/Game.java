@@ -76,16 +76,24 @@ public class Game {
     private boolean gameLoop(BoardComponent watcher) throws InterruptedException{
         round++;
         
+        gameloop:
         for (String kaijuName : kaijuOrder) {
             currentTurn = kaijuName;
             Kaiju kaiju = kaijus.get(kaijuName);
             Position pos = board.getPosition(kaiju);
-        
-            watcher.getWindow().updateTopText("Round "+round+". Turn for ["+(kaiju.isCpu()?"CPU] ":"HUMAN] ")+kaiju.getName());
-            watcher.getWindow().showAcceptControls();
-            inputSem.acquire();
-            input = null;
 
+            if (kaiju.isAlive()){
+                watcher.getWindow().updateTopText("Round %d. Turn for [%s] %s".formatted(round, (kaiju.isCpu()?"CPU":"HUMAN"), kaiju.getName()));
+                watcher.getWindow().showAcceptControls();
+                inputSem.acquire();
+                input = null;
+            } else {
+                watcher.getWindow().updateTopText("Round %d. Skipping [%s] %s's turn (ELIMINATED)".formatted(round, (kaiju.isCpu()?"CPU":"HUMAN"), kaiju.getName()));
+                watcher.getWindow().showAcceptControls();
+                inputSem.acquire();
+                input = null;
+                continue gameloop;
+            }        
 
             if (kaiju.isCpu()){
                 // CPU moves
@@ -122,7 +130,7 @@ public class Game {
                         input = null;
                     }
                 }
-                
+
                 // CPU attacks
                 LinkedList<AttackInfo> possibleAttacks = new LinkedList<>();
                 final Position kaijuPos = new Position(pos.row(), pos.col());

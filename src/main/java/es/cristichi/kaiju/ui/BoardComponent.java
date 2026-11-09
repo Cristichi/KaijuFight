@@ -91,6 +91,7 @@ public class BoardComponent extends JComponent {
 
                 if (gameObj != null){
                     g2d.setFont(GAMEOBJ_DISPLAY_FONT);
+                    gameObj.paintObject(g2d, boardSquare);
                     gameObj.displayInfo(g2d, boardSquare);
 
                     if (gameObj instanceof Kaiju kaiju && kaiju.equals(currentTurn)){
@@ -103,7 +104,7 @@ public class BoardComponent extends JComponent {
 
             g2d.setStroke(new BasicStroke(8, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2d.setColor(Color.DARK_GRAY);
-            g2d.drawRect(bounds.x, bounds.y, bounds.width-1, bounds.height-1);
+            g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
         }
     }
 

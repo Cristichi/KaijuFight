@@ -10,7 +10,7 @@ import es.cristichi.kaiju.game.GameObject;
 import es.cristichi.kaiju.game.io.ResourceException;
 import es.cristichi.kaiju.game.io.Resources;
 
-public class Kaiju extends GameObject implements AttackerObject, ManaUserObject {
+public class Kaiju extends GameObject implements AliveObject, AttackerObject, ManaUserObject {
     private String species;
     private int speed;
     private int damage;
@@ -55,6 +55,7 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
         return damage;
     }
 
+    @Override
     public int getMana() {
         return mana;
     }
@@ -69,10 +70,17 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
         return true;
     }
 
+    @Override
+    public boolean isAlive() {
+        return health>0;
+    }
+
+    @Override
     public int getHealth() {
         return health;
     }
 
+    @Override
     public boolean modifyHealth(int quantity){
         health+=quantity;
         if (health<=0){
@@ -87,7 +95,7 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
 
     @Override
     public boolean canBeAttackedBy(AttackType type, GameObject other) {
-        return true;
+        return isAlive();
     }
 
     @Override
@@ -99,33 +107,50 @@ public class Kaiju extends GameObject implements AttackerObject, ManaUserObject 
     public void displayInfo(Graphics2D g2d, Rectangle bounds) {
         super.displayInfo(g2d, bounds);
         FontMetrics fm = g2d.getFontMetrics();
-        {
-            String dHP = "Health: "+health;
-            Rectangle2D strBounds = fm.getStringBounds(dHP, g2d);
-            int x = bounds.x+5;
-            int y = (int) (bounds.y + strBounds.getHeight()/2 + fm.getAscent());
-            
-            g2d.setColor(Color.BLACK);
-            g2d.drawString(dHP, x-1, y+1);
-            g2d.drawString(dHP, x+1, y+1);
-            g2d.drawString(dHP, x-1, y-1);
-            g2d.drawString(dHP, x+1, y-1);
-            g2d.setColor(Color.GREEN);
-            g2d.drawString(dHP, x, y);
-        }
-        {
-            String dMana = "Mana: "+mana;
-            Rectangle2D strBounds = fm.getStringBounds(dMana, g2d);
-            int x = bounds.x+5;
-            int y = (int) (bounds.y - strBounds.getHeight() + fm.getAscent() + bounds.getHeight() -5);
-            
-            g2d.setColor(Color.BLACK);
-            g2d.drawString(dMana, x-1, y+1);
-            g2d.drawString(dMana, x+1, y+1);
-            g2d.drawString(dMana, x-1, y-1);
-            g2d.drawString(dMana, x+1, y-1);
-            g2d.setColor(Color.CYAN);
-            g2d.drawString(dMana, x, y);
+        if (isAlive()){
+            {
+                String dHP = "Health: "+health;
+                Rectangle2D strBounds = fm.getStringBounds(dHP, g2d);
+                int x = bounds.x+5;
+                int y = (int) (bounds.y + strBounds.getHeight()/2 + fm.getAscent());
+                
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(dHP, x-1, y+1);
+                g2d.drawString(dHP, x+1, y+1);
+                g2d.drawString(dHP, x-1, y-1);
+                g2d.drawString(dHP, x+1, y-1);
+                g2d.setColor(Color.GREEN);
+                g2d.drawString(dHP, x, y);
+            }
+            {
+                String dMana = "Mana: "+mana;
+                Rectangle2D strBounds = fm.getStringBounds(dMana, g2d);
+                int x = bounds.x+5;
+                int y = (int) (bounds.y - strBounds.getHeight() + fm.getAscent() + bounds.getHeight() -5);
+                
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(dMana, x-1, y+1);
+                g2d.drawString(dMana, x+1, y+1);
+                g2d.drawString(dMana, x-1, y-1);
+                g2d.drawString(dMana, x+1, y-1);
+                g2d.setColor(Color.CYAN);
+                g2d.drawString(dMana, x, y);
+            }
+        } else {
+            {
+                String msg = "Eliminated";
+                Rectangle2D strBounds = fm.getStringBounds(msg, g2d);
+                int x = bounds.x+5;
+                int y = (int) (bounds.y + strBounds.getHeight()/2 + fm.getAscent());
+                
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(msg, x-1, y+1);
+                g2d.drawString(msg, x+1, y+1);
+                g2d.drawString(msg, x-1, y-1);
+                g2d.drawString(msg, x+1, y-1);
+                g2d.setColor(Color.RED);
+                g2d.drawString(msg, x, y);
+            }
         }
     }
 }

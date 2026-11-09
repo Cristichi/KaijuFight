@@ -17,10 +17,10 @@ public class Main {
         Kaiju[] players;
         try {
             players = new Kaiju[]{
-                new Kaiju("Cristichi", "gummy", 1, 1, 3, 3, "Cristichi", "kaijus/gummy.png", Color.MAGENTA, false),
-                new Kaiju("Snail", "snail", 1, 1, 3, 3, "Random Snail", "kaijus/snail.png", Color.BLUE, true),
-                new Kaiju("Strong Bot", "strong", 1, 2, 1, 3, "Strengther", "kaijus/robot.png", Color.RED, true),
-                new Kaiju("Fast Bot", "fast", 2, 1, 1, 3, "Speeder", "kaijus/robot.png", Color.YELLOW, true)
+                new Kaiju("Cristichi", "gummy", 1, 1, 3, 1, "Cristichi", "kaijus/gummy.png", Color.MAGENTA, false),
+                new Kaiju("Snail", "snail", 1, 1, 3, 1, "Random Snail", "kaijus/snail.png", Color.BLUE, true),
+                new Kaiju("Strong Bot", "strong", 1, 2, 1, 1, "Strengther", "kaijus/robot.png", Color.RED, true),
+                new Kaiju("Fast Bot", "fast", 2, 1, 1, 1, "Speeder", "kaijus/robot.png", Color.YELLOW, true)
             };
         } catch (ResourceException e) {
             e.printStackTrace();
