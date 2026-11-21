@@ -96,6 +96,15 @@ public class Board {
             spawns = new LinkedList<>();
         }
 
+        public Builder addSquareOfCopies(Position start, Position finish, GameObject copies){
+            for (int i = start.row(); i <= finish.row(); i++) {
+                for (int j = start.col(); j <= finish.col(); j++) {
+                    squares[i][j] = copies;
+                }
+            }
+            return this;
+        }
+
         public Builder addObject(Position position, GameObject gameObject){
             squares[position.row()][position.col()] = gameObject;
             return this;

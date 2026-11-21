@@ -105,6 +105,9 @@ public class Game {
                             try {
                                 GameObject moveGO = board.getGameObject(pos.afterMove(movement));
                                 if (moveGO == null || moveGO.canBeReplacedBy(kaiju)){
+                                    if (moveGO != null){
+                                        moveGO.beforeGettingReplacedBy(kaiju);
+                                    }
                                     moves.add(movement);
                                 }
                             }catch (IndexOutOfBoundsException _){
@@ -197,6 +200,9 @@ public class Game {
                                 Position nextPos = pos.afterMove(inMove);
                                 GameObject moveGO = board.getGameObject(nextPos);
                                 if (moveGO == null || moveGO.canBeReplacedBy(kaiju)){
+                                    if (moveGO != null){
+                                        moveGO.beforeGettingReplacedBy(kaiju);
+                                    }
                                     board.setGameObject(pos, null);
                                     board.setGameObject(nextPos, kaiju);
                                     pos = nextPos;

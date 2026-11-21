@@ -43,13 +43,17 @@ public class Building extends GameObject {
     }
 
     @Override
+    public void beforeGettingReplacedBy(GameObject other) {
+    }
+
+    @Override
     public boolean stopsRangedAttacks(GameObject other) {
         return true;
     }
 
     @Override
     public boolean canBeAttackedBy(AttackType type, GameObject other) {
-        return type.equals(AttackType.MELEE);
+        return charges>0?type.equals(AttackType.MELEE):false;
     }
 
     @Override
@@ -66,19 +70,21 @@ public class Building extends GameObject {
     @Override
     public void displayInfo(Graphics2D g2d, Rectangle bounds) {
         super.displayInfo(g2d, bounds);
-        String manaStored = "Mana stored: "+charges;
-        FontMetrics fm = g2d.getFontMetrics();
-        Rectangle2D r = fm.getStringBounds(manaStored, g2d);
-        int x = bounds.x+5;
-        int y = (int) (bounds.y + r.getHeight()/2) + fm.getAscent();
-        
-        g2d.setColor(Color.BLACK);
-        g2d.drawString(manaStored, x-1, y+1);
-        g2d.drawString(manaStored, x+1, y+1);
-        g2d.drawString(manaStored, x-1, y-1);
-        g2d.drawString(manaStored, x+1, y-1);
-        g2d.setColor(Color.CYAN);
-        g2d.drawString(manaStored, x, y);
+        if (charges>0){
+            String manaStored = "Mana stored: "+charges;
+            FontMetrics fm = g2d.getFontMetrics();
+            Rectangle2D r = fm.getStringBounds(manaStored, g2d);
+            int x = bounds.x+5;
+            int y = (int) (bounds.y + r.getHeight()/2) + fm.getAscent();
+            
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(manaStored, x-1, y+1);
+            g2d.drawString(manaStored, x+1, y+1);
+            g2d.drawString(manaStored, x-1, y-1);
+            g2d.drawString(manaStored, x+1, y-1);
+            g2d.setColor(Color.CYAN);
+            g2d.drawString(manaStored, x, y);
+        }
     }
 
 }

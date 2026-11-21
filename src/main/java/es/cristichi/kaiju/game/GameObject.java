@@ -65,6 +65,13 @@ public abstract class GameObject implements Comparable<GameObject> {
     public abstract boolean canBeReplacedBy(GameObject other);
 
     /**
+     * A method to give a change to the GameObject to do something when being replaced. For instance, for items that can be picked
+     * by walking into them.
+     * @param other
+     */
+    public abstract void beforeGettingReplacedBy(GameObject other);
+
+    /**
      * @param other
      * @return <code>true</code> if this GameObject can be attacked, <code>false</code> otherwise.
      */

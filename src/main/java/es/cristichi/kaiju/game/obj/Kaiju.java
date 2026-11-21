@@ -5,10 +5,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 
 import es.cristichi.kaiju.game.GameObject;
 import es.cristichi.kaiju.game.io.ResourceException;
 import es.cristichi.kaiju.game.io.Resources;
+import es.cristichi.kaiju.game.obj.carry.Carryable;
 
 public class Kaiju extends GameObject implements AliveObject, AttackerObject, ManaUserObject {
     private String species;
@@ -17,20 +19,31 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
     private int mana;
     private int health;
     private boolean cpu;
+    private LinkedList<Carryable> carryables;
 
-    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay, String imageResource, Color colorDisplay, boolean cpu) throws ResourceException {
+    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay,
+        String imageResource, Color colorDisplay, LinkedList<Carryable> carryables, boolean cpu) throws ResourceException {
         super(name, textDisplay, imageResource==null?null:Resources.loadImage(imageResource), colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;
         this.mana = mana;
         this.health = health;
+        this.carryables = carryables==null?new LinkedList<>():carryables;
         this.cpu = cpu;
+
+        for (Carryable carryable : this.carryables) {
+            carryable.onPickup(this);
+        }
     }
 
     @Override
     public boolean canBeReplacedBy(GameObject other) {
         return false;
+    }
+
+    @Override
+    public void beforeGettingReplacedBy(GameObject other) {
     }
 
     @Override
@@ -46,8 +59,21 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
         return speed;
     }
 
+    public int modifySpeed(int quantity){
+        int result = speed + quantity;
+        if (speed>=0){
+            speed = result;
+        }
+        return speed;
+    }
+
     public int getDamage() {
         return damage;
+    }
+
+    public void giveItem(Carryable carryable){
+        carryables.add(carryable);
+        carryable.onPickup(this);
     }
 
     @Override
@@ -100,7 +126,11 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
 
     @Override
     public AttackResult receiveAttack(AttackType type, AttackerObject attacker, int quantity) {
-        return new AttackResult(0, modifyHealth(-quantity)?quantity:0);
+        AttackResult res = new AttackResult(0, modifyHealth(-quantity)?quantity:0);
+        for (Carryable carryable : carryables) {
+            res = carryable.onDamageCalc(type, attacker, this, res.damageToAttacker(), res.damageToDefender());
+        }
+        return res;
     }
 
     @Override
