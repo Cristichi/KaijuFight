@@ -35,7 +35,7 @@ public class KaijuGameWindow extends JFrame{
     public KaijuGameWindow(Game game){
         super("Kaiju Fight!");
         this.game = game;
-                
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout(new BorderLayout());

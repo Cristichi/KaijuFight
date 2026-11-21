@@ -10,9 +10,15 @@ import es.cristichi.kaiju.game.obj.AttackerObject;
 import es.cristichi.kaiju.game.obj.Kaiju;
 
 public class CarryableAdapter extends GameObject implements Carryable {
-    public CarryableAdapter(String name, String textDisplay, BufferedImage image, Color colorDisplay) {
+    protected String desc;
+    public CarryableAdapter(String name, String desc, String textDisplay, BufferedImage image, Color colorDisplay) {
         super(name, textDisplay, image, colorDisplay);
-        //TODO Auto-generated constructor stub
+        this.desc = desc;
+    }
+
+    @Override
+    public String getDesc() {
+        return desc;
     }
 
     @Override

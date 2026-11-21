@@ -1,5 +1,6 @@
 package es.cristichi.kaiju.game;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import es.cristichi.kaiju.game.obj.Board.Movement;
 import es.cristichi.kaiju.ui.BoardComponent;
 
 public class Game {
+    private Semaphore gameSem;
     private Semaphore inputSem;
     private Object input;
 
@@ -29,19 +31,19 @@ public class Game {
     protected HashMap<String, Kaiju> kaijus;
     protected LinkedList<String> kaijuOrder;
     protected String currentTurn;
+    protected Kaiju winner;
 
     public Game(Random rng, Board board, Kaiju[] kaijus) {
         this.rng = rng;
 
         this.board = board;
-        this.kaijus = new HashMap<>(kaijus.length);
-        for (Kaiju kaiju : kaijus) {
-            this.kaijus.put(kaiju.getName(), kaiju);
-        }
+        setPlayers(kaijus);
 
         ready = false;
 
         inputSem = new Semaphore(0);
+
+        gameSem = new Semaphore(0);
     }
 
     public Game(long seed, Board board, Kaiju[] kaijus) {
@@ -52,8 +54,16 @@ public class Game {
         this(new Random(), board, kaijus);
     }
 
+    public Game(Board board) {
+        this(new Random(), board, new Kaiju[0]);
+    }
+
     public Board getBoard() {
         return board;
+    }
+
+    public Random getRng() {
+        return rng;
     }
 
     public void sendInput(Object input){
@@ -66,6 +76,37 @@ public class Game {
 
     public Kaiju getCurrentTurnKaiju() {
         return kaijus.get(currentTurn);
+    }
+
+    public void setPlayers(Collection<Kaiju> kaijus) {
+        setPlayers(kaijus, false);
+    }
+
+    public void setPlayers(Collection<Kaiju> kaijus, boolean resetHealth) {
+        this.kaijus = new HashMap<>(kaijus.size());
+        for (Kaiju kaiju : kaijus) {
+            if (resetHealth){
+                kaiju.resetHealth();
+            }
+            this.kaijus.put(kaiju.getName(), kaiju);
+        }
+    }
+    public void setPlayers(Kaiju[] kaijus) {
+        setPlayers(kaijus, false);
+    }
+
+    public void setPlayers(Kaiju[] kaijus, boolean resetHealth) {
+        this.kaijus = new HashMap<>(kaijus.length);
+        for (Kaiju kaiju : kaijus) {
+            if (resetHealth){
+                kaiju.resetHealth();
+            }
+            this.kaijus.put(kaiju.getName(), kaiju);
+        }
+    }
+
+    public HashMap<String, Kaiju> getKaijus() {
+        return kaijus;
     }
     
     /**
@@ -301,13 +342,15 @@ public class Game {
                 }
             }
             if (alive.size()==1){
-                Kaiju winner = kaijus.get(alive.get(0));
+                winner = kaijus.get(alive.get(0));
                 watcher.getWindow().updateTopText("And the winner is [%s] %s!".formatted((winner.isCpu()?"CPU":"HUMAN"), winner.getName()));
-                watcher.getWindow().removeControls();
+                watcher.getWindow().showAcceptControls();
+                inputSem.acquire();
                 return false;
             } else if (alive.size()<=0){
                 watcher.getWindow().updateTopText("What? Well, Nobody wins!!");
-                watcher.getWindow().removeControls();
+                watcher.getWindow().showAcceptControls();
+                inputSem.acquire();
                 return false;
             }
         }
@@ -349,11 +392,25 @@ public class Game {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                gameSem.release();
             }
         });
         ready = true;
 
         return thread;
+    }
+
+    public Kaiju waitOnGameEnd(){
+        try {
+            gameSem.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return winner;
+    }
+
+    public Kaiju getWinner(){
+        return winner;
     }
 
     @Override

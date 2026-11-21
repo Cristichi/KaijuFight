@@ -17,6 +17,7 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
     private int speed;
     private int damage;
     private int mana;
+    private int startHealth;
     private int health;
     private boolean cpu;
     private LinkedList<Carryable> carryables;
@@ -28,6 +29,7 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
         this.speed = speed;
         this.damage = damage;
         this.mana = mana;
+        this.startHealth = health;
         this.health = health;
         this.carryables = carryables==null?new LinkedList<>():carryables;
         this.cpu = cpu;
@@ -49,6 +51,10 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
     @Override
     public boolean stopsRangedAttacks(GameObject other) {
         return true;
+    }
+
+    public void resetHealth(){
+        health = startHealth;
     }
 
     public String getSpecies() {
