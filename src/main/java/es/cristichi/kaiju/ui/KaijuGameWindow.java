@@ -6,12 +6,15 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import es.cristichi.kaiju.game.Game;
 import es.cristichi.kaiju.game.obj.AttackInfo;
@@ -68,6 +71,17 @@ public class KaijuGameWindow extends JFrame{
                     }
                 }
             });
+            KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false);
+            KeyStroke spaceKey = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false);
+            controls.getInputMap().put(enterKey, "ACCEPT");
+            controls.getInputMap().put(spaceKey, "ACCEPT");
+            controls.getActionMap().put("ACCEPT", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnAccept.doClick();
+                }
+            });
+
             acceptControls.add(btnAccept, BorderLayout.CENTER);
             controls.add(acceptControls, "accept");
         }
@@ -82,6 +96,18 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(null);
                 }
             });
+            KeyStroke backKey = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0, false);
+            KeyStroke spaceKey = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false);
+            controls.getInputMap().put(backKey, "STAY");
+            controls.getInputMap().put(spaceKey, "STAY");
+            controls.getActionMap().put("STAY", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnStay.doClick();
+                }
+            });
+            centeredMoveControls.add(btnStay);
+
             JButton btnUp = new JButton("↑");
             btnUp.addActionListener(new ActionListener() {
                 @Override
@@ -89,6 +115,20 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(Movement.UP);
                 }
             });
+            KeyStroke upKey = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false);
+            KeyStroke wKey = KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false);
+            controls.getInputMap().put(upKey, "UP");
+            controls.getInputMap().put(wKey, "UP");
+            controls.getActionMap().put("UP", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnUp.doClick();
+                }
+            });
+            centeredMoveControls.add(btnUp);
+
+            centeredMoveControls.add(new JPanel());
+
             JButton btnLeft = new JButton("←");
             btnLeft.addActionListener(new ActionListener() {
                 @Override
@@ -96,6 +136,18 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(Movement.LEFT);
                 }
             });
+            KeyStroke leftKey = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false);
+            KeyStroke aKey = KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false);
+            controls.getInputMap().put(leftKey, "LEFT");
+            controls.getInputMap().put(aKey, "LEFT");
+            controls.getActionMap().put("LEFT", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnLeft.doClick();
+                }
+            });
+            centeredMoveControls.add(btnLeft);
+
             JButton btnDown = new JButton("↓");
             btnDown.addActionListener(new ActionListener() {
                 @Override
@@ -103,6 +155,18 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(Movement.DOWN);
                 }
             });
+            KeyStroke downKey = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false);
+            KeyStroke sKey = KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false);
+            controls.getInputMap().put(downKey, "DOWN");
+            controls.getInputMap().put(sKey, "DOWN");
+            controls.getActionMap().put("DOWN", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnDown.doClick();
+                }
+            });
+            centeredMoveControls.add(btnDown);
+
             JButton btnRight = new JButton("→");
             btnRight.addActionListener(new ActionListener() {
                 @Override
@@ -110,12 +174,16 @@ public class KaijuGameWindow extends JFrame{
                     KaijuGameWindow.this.game.sendInput(Movement.RIGHT);
                 }
             });
-            
-            centeredMoveControls.add(btnStay);
-            centeredMoveControls.add(btnUp);
-            centeredMoveControls.add(new JPanel());
-            centeredMoveControls.add(btnLeft);
-            centeredMoveControls.add(btnDown);
+            KeyStroke rightKey = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false);
+            KeyStroke dKey = KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false);
+            controls.getInputMap().put(rightKey, "RIGHT");
+            controls.getInputMap().put(dKey, "RIGHT");
+            controls.getActionMap().put("RIGHT", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    btnRight.doClick();
+                }
+            });
             centeredMoveControls.add(btnRight);
 
             moveControls.add(centeredMoveControls);
@@ -180,6 +248,7 @@ public class KaijuGameWindow extends JFrame{
         });
         attackControls.add(btnNoAttack);
         controlCards.show(controls, "attack");
+        btnNoAttack.grabFocus();
     }
 
     public void startGame(){
