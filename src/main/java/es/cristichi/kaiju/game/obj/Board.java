@@ -10,7 +10,23 @@ public class Board {
     protected GameObject[][] squares;
     protected LinkedList<Position> spawns;
 
-    protected Board(GameObject[][] squares, LinkedList<Position> spawns){
+    public Board(Board copy){
+        this.squares = new GameObject[copy.squares.length][];
+        this.spawns = new LinkedList<>();
+
+        for (int i = 0; i < copy.squares.length; i++) {
+            squares[i] = new GameObject[copy.squares[i].length];
+            for (int j = 0; j < copy.squares[i].length; j++) {
+                squares[i][j] = copy.squares[i][j];
+            }
+        }
+
+        for (Position spawn : copy.spawns) {
+            spawns.add(spawn);
+        }
+    }
+    
+    public Board(GameObject[][] squares, LinkedList<Position> spawns){
         this.squares = squares;
         this.spawns = spawns;
 

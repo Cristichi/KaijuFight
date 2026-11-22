@@ -29,7 +29,7 @@ public class RewardWindow extends JFrame{
         getContentPane().setLayout(new FlowLayout());
 
         for (CarryableFactory<? extends Carryable> choiceType : choices) {
-            JButton choiceBtn = new JButton(choiceType.getDisplayName());
+            JButton choiceBtn = new JButton(choiceType.getName());
             choiceBtn.setToolTipText(choiceType.getDesc());
             choiceBtn.addActionListener(new ActionListener() {
 

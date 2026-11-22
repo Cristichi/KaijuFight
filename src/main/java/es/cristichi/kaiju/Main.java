@@ -11,6 +11,7 @@ import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.game.obj.carry.Banana;
 import es.cristichi.kaiju.game.obj.carry.factory.BananaFactory;
+import es.cristichi.kaiju.game.obj.carry.factory.TestFactory;
 
 public class Main {
     public static void main(String[] args) {
@@ -54,6 +55,11 @@ public class Main {
             .addGame(new Game(board))
             .addGame(new Game(board))
             .addReward(new BananaFactory())
+            .addReward(new TestFactory("Item 1"))
+            .addReward(new TestFactory("Item 2"))
+            .addReward(new TestFactory("Item 3"))
+            .addReward(new TestFactory("Item 4"))
+            .addReward(new TestFactory("Item 5"))
             .build();
 
         myCampaña.start();

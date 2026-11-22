@@ -31,36 +31,32 @@ public class Campaign extends Thread{
 
     @Override
     public void run() {
-        for (Game game : games) {
-            game.setPlayers(players.values(), true);
-            System.out.println(game.getKaijus().size());
+        for (int i = 0; i<games.length; i++) {
+            games[i].setPlayers(players.values(), true);
 
-            KaijuGameWindow window = new KaijuGameWindow(game);
+            KaijuGameWindow window = new KaijuGameWindow(games[i]);
             window.setSize(1600, 1000);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
             window.startGame();
 
-            Kaiju winner = game.waitOnGameEnd();
+            Kaiju winner = games[i].waitOnGameEnd();
             window.dispose();
 
-            players = game.getKaijus();
+            players = games[i].getKaijus();
 
             if (winner != null){
-                System.out.println("Winner of game: "+game.getWinner());
+                System.out.println("Winner of game: "+games[i].getWinner());
                 
                 ArrayList<CarryableFactory<? extends Carryable>> newRewards = new ArrayList<>(MAX_REWARDS);
                 if (rewardPool.length <= MAX_REWARDS){
                     for (CarryableFactory<? extends Carryable> carryableFactory : rewardPool) {
                         newRewards.add(carryableFactory);
-                        System.out.println("Added: "+carryableFactory.toString());
                     }
                 } else {
-                    int[] rewards = game.getRng().ints(0, rewardPool.length).distinct().limit(3).toArray();
-                    System.out.println(rewards);
-                    for (int i = 0; i < rewards.length; i++) {
-                        newRewards.add(rewardPool[rewards[i]]);
-                        System.out.println("Added at random: "+rewardPool[rewards[i]].toString());
+                    int[] rewards = games[i].getRng().ints(0, rewardPool.length).distinct().limit(3).toArray();
+                    for (int j = 0; j < rewards.length; j++) {
+                        newRewards.add(rewardPool[rewards[j]]);
                     }
                 }
 
@@ -71,7 +67,7 @@ public class Campaign extends Thread{
                 rewardWindow.setVisible(true);
                 CarryableFactory<? extends Carryable> item = rewardWindow.waitForChosen();
                 if (item != null){
-                    players.get(game.getWinner().getName()).giveItem(item.create());
+                    players.get(games[i].getWinner().getName()).giveItem(item.create());
                 }
             } else {
                 System.out.println("Winner of game: Nobody!");

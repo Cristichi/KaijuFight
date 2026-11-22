@@ -36,7 +36,7 @@ public class Game {
     public Game(Random rng, Board board, Kaiju[] kaijus) {
         this.rng = rng;
 
-        this.board = board;
+        this.board = new Board(board);
         setPlayers(kaijus);
 
         ready = false;
