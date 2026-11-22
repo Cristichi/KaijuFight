@@ -18,6 +18,7 @@ public class Campaign extends Thread{
     protected String name;
     protected String author;
     protected Game[] games;
+    protected Kaiju[] extras;
     protected HashMap<String, Kaiju> players;
     protected CarryableFactory<? extends Carryable>[] rewardPool;
 
@@ -109,7 +110,7 @@ public class Campaign extends Thread{
             for (Kaiju player : players) {
                 this.players.put(player.getName(), player);
             }
-            rewardPool = new LinkedList<>();
+            this.rewardPool = new LinkedList<>();
         }
 
         public Builder addPlayers(Kaiju player){
@@ -128,14 +129,11 @@ public class Campaign extends Thread{
         }
 
         public Campaign build(){
-            if (games == null){
+            if (games.isEmpty()){
                 throw new IllegalArgumentException("Add at least a game to the Campaign.");
             }
-            if (players == null){
+            if (players.isEmpty()){
                 throw new IllegalArgumentException("Add at least a player to the Campaign.");
-            }
-            if (rewardPool == null){
-                rewardPool = new LinkedList<>();
             }
             return new Campaign(name, author, games.toArray(new Game[games.size()]), players,
                 rewardPool.toArray(new CarryableFactory<?>[rewardPool.size()]));

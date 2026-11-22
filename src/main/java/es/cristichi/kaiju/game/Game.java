@@ -134,7 +134,7 @@ public class Game {
                 inputSem.acquire();
                 input = null;
                 continue gameloop;
-            }        
+            }
 
             if (kaiju.isCpu()){
                 // CPU moves
@@ -381,6 +381,22 @@ public class Game {
                 board.setGameObject(spawn, kaijus.get(rngNames.next()));
             }
         }
+
+        board.forEachSquare((pos, gameObj) -> {
+            if (gameObj instanceof Kaiju npc){
+                boolean alreadyHere = false;
+                for (Kaiju kaiju : kaijus.values()) {
+                    if (kaiju.equals(npc)){
+                        alreadyHere = true;
+                        break;
+                    }
+                }
+                if (!alreadyHere){
+                    kaijus.put(npc.getName(), npc);
+                    kaijuOrder.add(npc.getName());
+                }
+            }
+        });
         
         Collections.shuffle(kaijuOrder, rng);
 
