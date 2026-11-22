@@ -23,7 +23,7 @@ public class Main {
                     "kaijus/gummy.png", Color.MAGENTA, null, false),
                 new Kaiju("Snail Bot", "snail", 1, 1, 3, 3,
                     "kaijus/snail.png", Color.BLUE, null, true),
-                new Kaiju("Strong Bot", "strong", 1, 2, 1, 3,
+                new Kaiju("Strong Bot", "strong", 1, 2, 0, 3,
                     "kaijus/robot.png", Color.RED, null, true),
                 new Kaiju("Fast Bot", "fast", 2, 1, 1, 3,
                     "kaijus/robot.png", Color.YELLOW, null, true)
@@ -49,15 +49,15 @@ public class Main {
             .addSquareOfCopies(new Position(2, 6), new Position(4, 6), new Building(0))
             .build();
 
-        Board testBoard = new Board.Builder(3, 3)
+        Board testBoard = new Board.Builder(4, 4)
             .addSpawnPoint(new Position(0, 0))
-            .addSpawnPoint(new Position(2, 0))
-            .addSpawnPoint(new Position(0, 2))
-            .addSpawnPoint(new Position(2, 2))
+            .addSpawnPoint(new Position(3, 0))
+            .addSpawnPoint(new Position(0, 3))
+            .addSpawnPoint(new Position(3, 3))
             .build();
 
         Campaign myCampaña = new Campaign.Builder("My campaña", "Cristichi", players)
-            .addGame(new Game(board))
+            .addGame(new Game(testBoard))
             .addGame(new Game(board))
             .addGame(new Game(board))
             .addReward(new TestFactory("Item 1"))

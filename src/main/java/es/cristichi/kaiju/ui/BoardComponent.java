@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JComponent;
 
+import es.cristichi.kaiju.game.GameObject;
 import es.cristichi.kaiju.game.obj.Board;
 import es.cristichi.kaiju.game.obj.Kaiju;
 
@@ -79,27 +80,39 @@ public class BoardComponent extends JComponent {
 
             Kaiju currentTurn = window.getGame().getCurrentTurnKaiju();
 
-            final AtomicInteger colorI = new AtomicInteger(0);
-            board.forEachSquare((pos, gameObj) -> {
-                g2d.setStroke(new BasicStroke(1));
-                Rectangle boardSquare = new Rectangle(bounds.x+squareSize.width*pos.col(), bounds.y+squareSize.height*pos.row(), squareSize.width, squareSize.height);
-                g2d.setColor(boardColors[colorI.getAndAdd(1)]);
-                if (colorI.get() >= boardColors.length){
-                    colorI.set(0);
-                }
-                g2d.fillRect(boardSquare.x, boardSquare.y, boardSquare.width, boardSquare.height);
-
-                if (gameObj != null){
-                    g2d.setFont(GAMEOBJ_DISPLAY_FONT);
-                    gameObj.paintObject(g2d, boardSquare);
-                    gameObj.displayInfo(g2d, boardSquare);
-
-                    if (gameObj instanceof Kaiju kaiju && kaiju.equals(currentTurn)){
-                        g2d.setColor(kaiju.getColorDisplay());
-                        g2d.setStroke(new BasicStroke(6));
-                        g2d.drawRect(boardSquare.x+3, boardSquare.y+3, boardSquare.width-6, boardSquare.height-6);
+            final int startColor = 0;
+            final AtomicInteger colorI = new AtomicInteger(startColor);
+            board.forEachRow((i, row) -> {
+                colorI.set(startColor);
+                for (int j=0; j<i; j++) {
+                    if (colorI.addAndGet(1) >= boardColors.length){
+                        colorI.set(startColor);
                     }
                 }
+                for(int j=0; j<row.length; j++){
+                    GameObject gameObj = row[j];
+                    g2d.setStroke(new BasicStroke(1));
+                    Rectangle boardSquare = new Rectangle(bounds.x+squareSize.width*j, bounds.y+squareSize.height*i, squareSize.width, squareSize.height);
+                    g2d.setColor(boardColors[colorI.getAndAdd(1)]);
+                    if (colorI.get() >= boardColors.length){
+                        colorI.set(0);
+                    }
+                    g2d.fillRect(boardSquare.x, boardSquare.y, boardSquare.width, boardSquare.height);
+
+                    if (gameObj != null){
+                        g2d.setFont(GAMEOBJ_DISPLAY_FONT);
+                        gameObj.paintObject(g2d, boardSquare);
+                        gameObj.displayInfo(g2d, boardSquare);
+
+                        if (gameObj instanceof Kaiju kaiju && kaiju.equals(currentTurn)){
+                            g2d.setColor(kaiju.getColorDisplay());
+                            g2d.setStroke(new BasicStroke(6));
+                            g2d.drawRect(boardSquare.x+3, boardSquare.y+3, boardSquare.width-6, boardSquare.height-6);
+                        }
+                    }
+                }
+            });
+            board.forEachSquare((pos, gameObj) -> {
             });
 
             g2d.setStroke(new BasicStroke(8, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
