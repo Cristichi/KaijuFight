@@ -8,7 +8,7 @@ import es.cristichi.kaiju.game.obj.carry.CarryableFactory;
 
 public class TestFactory extends CarryableFactory<Carryable>{
     public TestFactory(String name){
-        super(name, "Random desc xdd");
+        super(name, "Random desc xdd", true);
     }
 
     @Override

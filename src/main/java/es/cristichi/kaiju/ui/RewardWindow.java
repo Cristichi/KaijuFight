@@ -1,5 +1,6 @@
 package es.cristichi.kaiju.ui;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,8 @@ import java.util.concurrent.Semaphore;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import es.cristichi.kaiju.game.obj.carry.Carryable;
 import es.cristichi.kaiju.game.obj.carry.CarryableFactory;
@@ -26,7 +29,14 @@ public class RewardWindow extends JFrame{
         windowSem = new Semaphore(0);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new FlowLayout());
+        getContentPane().setLayout(new BorderLayout());
+
+        JLabel textDisplay = new JLabel("Hover over an item to see what it does!");
+        textDisplay.setHorizontalAlignment(JLabel.CENTER);
+        getContentPane().add(textDisplay, BorderLayout.NORTH);
+
+        JPanel choicePanel = new JPanel(new FlowLayout());
+        getContentPane().add(choicePanel, BorderLayout.CENTER);
 
         for (CarryableFactory<? extends Carryable> choiceType : choices) {
             JButton choiceBtn = new JButton(choiceType.getName());
@@ -40,7 +50,7 @@ public class RewardWindow extends JFrame{
                     windowSem.release();
                 }
             });
-            getContentPane().add(choiceBtn);
+            choicePanel.add(choiceBtn);
         }
 
         JButton noChoiceBtn = new JButton("Skip");
@@ -53,7 +63,7 @@ public class RewardWindow extends JFrame{
                 windowSem.release();
             }
         });
-        getContentPane().add(noChoiceBtn);
+        choicePanel.add(noChoiceBtn);
     }
 
     public CarryableFactory<? extends Carryable> waitForChosen(){

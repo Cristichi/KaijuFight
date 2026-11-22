@@ -68,6 +68,21 @@ public class Campaign extends Thread{
                 CarryableFactory<? extends Carryable> item = rewardWindow.waitForChosen();
                 if (item != null){
                     players.get(games[i].getWinner().getName()).giveItem(item.create());
+                    if (item.isUnique()){
+                        CarryableFactory<? extends Carryable>[] newPool = new CarryableFactory<?>[rewardPool.length-1];
+                        boolean hit = false;
+                        System.out.println("Item: "+item);
+                        for (int j = 0; j < rewardPool.length; j++) {
+                            if (hit){
+                                newPool[j-1] = rewardPool[j];
+                            } else if (rewardPool[j].equals(item)){
+                                hit = true;
+                            } else {
+                                newPool[j] = rewardPool[j];
+                            }
+                        }
+                        rewardPool = newPool;
+                    }
                 }
             } else {
                 System.out.println("Winner of game: Nobody!");
