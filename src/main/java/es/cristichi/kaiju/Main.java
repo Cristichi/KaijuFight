@@ -17,15 +17,15 @@ public class Main {
         System.out.println("Kaiju game starting. Check the window.");
         
         Kaiju[] players = new Kaiju[]{
-                new Kaiju("Cristichi", "gummy", 1, 1, 3, 3,
-                    "kaijus/gummy.png", Color.MAGENTA, null, false),
-                new Kaiju("Snail Bot", "snail", 1, 1, 3, 3,
-                    "kaijus/snail.png", Color.BLUE, null, true),
-                new Kaiju("Strong Bot", "strong", 1, 2, 0, 3,
-                    "kaijus/robot.png", Color.RED, null, true),
-                new Kaiju("Fast Bot", "fast", 2, 1, 1, 3,
-                    "kaijus/robot.png", Color.YELLOW, null, true)
-            };
+            new Kaiju("Cristichi", "gummy", 1, 1, 3, 3,
+                "kaijus/gummy.png", Color.MAGENTA, null, false),
+            new Kaiju("Snail Bot", "snail", 1, 1, 3, 3,
+                "kaijus/snail.png", Color.BLUE, null, true),
+            new Kaiju("Strong Bot", "strong", 1, 2, 0, 3,
+                "kaijus/robot.png", Color.RED, null, true),
+            new Kaiju("Fast Bot", "fast", 2, 1, 1, 3,
+                "kaijus/robot.png", Color.YELLOW, null, true)
+        };
 
         Board board1 = new Board.Builder(7, 7)
             .addSpawnPoint(new Position(0, 0))
@@ -44,12 +44,12 @@ public class Main {
             .build();
 
         Board boardBoss = new Board.Builder(5, 5)
-                .addSpawnPoint(new Position(0, 0))
-                .addSpawnPoint(new Position(4, 0))
-                .addSpawnPoint(new Position(0, 4))
-                .addSpawnPoint(new Position(4, 4))
-                .addObject(new Position(2, 2), new Kaiju("Boss", "cosa mala", 6, 3, 0, 6, null, Color.RED, null, true))
-                .build();
+            .addSpawnPoint(new Position(0, 0))
+            .addSpawnPoint(new Position(4, 0))
+            .addSpawnPoint(new Position(0, 4))
+            .addSpawnPoint(new Position(4, 4))
+            .addObject(new Position(2, 2), new Kaiju("Boss", "cosa mala", 6, 3, 0, 6, null, Color.RED, null, true))
+            .build();
 
         Campaign myCampaña = new Campaign.Builder("My campaña", "Cristichi", players)
             .addGame(new Game(board1))
