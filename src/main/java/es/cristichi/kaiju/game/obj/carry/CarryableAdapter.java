@@ -11,8 +11,8 @@ import es.cristichi.kaiju.game.obj.Kaiju;
 
 public class CarryableAdapter extends GameObject implements Carryable {
     protected String desc;
-    public CarryableAdapter(String name, String desc, String textDisplay, BufferedImage image, Color colorDisplay) {
-        super(name, textDisplay, image, colorDisplay);
+    public CarryableAdapter(String name, String desc, BufferedImage image, Color colorDisplay) {
+        super(name, image, colorDisplay);
         this.desc = desc;
     }
 

@@ -22,7 +22,7 @@ public class Building extends GameObject {
     private BufferedImage imgEmptied;
 
     public Building(int charges) {
-        super("Building", null, null, charges>0?COLOR_MANAED:COLOR_EMPTIED);
+        super("Building", null, charges>0?COLOR_MANAED:COLOR_EMPTIED);
         this.charges = charges;
         try {
             imgManaed = Resources.loadImage(IMG_MANAED);

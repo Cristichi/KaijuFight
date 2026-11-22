@@ -18,14 +18,12 @@ import es.cristichi.kaiju.game.obj.AttackerObject;
 public abstract class GameObject implements Comparable<GameObject> {
     private UUID uuid;
     protected String name;
-    protected String textDisplay;
     protected BufferedImage image;
     protected Color colorDisplay;
 
-    public GameObject(String name, String textDisplay, BufferedImage image, Color colorDisplay) {
+    public GameObject(String name, BufferedImage image, Color colorDisplay) {
         uuid = UUID.randomUUID();
         this.name = name;
-        this.textDisplay = textDisplay;
         this.image = image;
         this.colorDisplay = colorDisplay;
     }
@@ -40,10 +38,6 @@ public abstract class GameObject implements Comparable<GameObject> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTextDisplay() {
-        return textDisplay;
     }
 
     public Color getColorDisplay() {
@@ -111,18 +105,18 @@ public abstract class GameObject implements Comparable<GameObject> {
     public void displayInfo(Graphics2D g2d, Rectangle bounds){
         FontMetrics fm = g2d.getFontMetrics();
 
-        if (textDisplay != null){
-            Rectangle2D textDisplayBounds = fm.getStringBounds(textDisplay, g2d);
-            int x = (int) (bounds.x + (bounds.width - textDisplayBounds.getWidth())/2);
-            int y = (int) (bounds.y + (bounds.height - textDisplayBounds.getHeight())/2) + fm.getAscent();
+        if (image == null){
+            Rectangle2D nameBounds = fm.getStringBounds(name, g2d);
+            int x = (int) (bounds.x + (bounds.width - nameBounds.getWidth())/2);
+            int y = (int) (bounds.y + (bounds.height - nameBounds.getHeight())/2) + fm.getAscent();
 
             g2d.setColor(Color.BLACK);
-            g2d.drawString(textDisplay, x-1, y+1);
-            g2d.drawString(textDisplay, x+1, y+1);
-            g2d.drawString(textDisplay, x-1, y-1);
-            g2d.drawString(textDisplay, x+1, y-1);
+            g2d.drawString(name, x-1, y+1);
+            g2d.drawString(name, x+1, y+1);
+            g2d.drawString(name, x-1, y-1);
+            g2d.drawString(name, x+1, y-1);
             g2d.setColor(Color.WHITE);
-            g2d.drawString(textDisplay, x, y);
+            g2d.drawString(name, x, y);
         }
     }
 

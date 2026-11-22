@@ -13,7 +13,7 @@ public class TestFactory extends CarryableFactory<Carryable>{
 
     @Override
     public Carryable create() {
-        return new CarryableAdapter(name, desc, name, null, Color.BLUE);
+        return new CarryableAdapter(name, desc, null, Color.BLUE);
     }
     
 }

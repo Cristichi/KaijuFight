@@ -23,9 +23,9 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
     private boolean cpu;
     private LinkedList<Carryable> carryables;
 
-    public Kaiju(String name, String species, int speed, int damage, int mana, int health, String textDisplay,
+    public Kaiju(String name, String species, int speed, int damage, int mana, int health,
         String imageResource, Color colorDisplay, LinkedList<Carryable> carryables, boolean cpu) throws ResourceException {
-        super(name, textDisplay, imageResource==null?null:Resources.loadImage(imageResource), colorDisplay);
+        super(name, imageResource==null?null:Resources.loadImage(imageResource), colorDisplay);
         this.species = species;
         this.speed = speed;
         this.damage = damage;

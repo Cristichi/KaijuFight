@@ -7,7 +7,7 @@ import es.cristichi.kaiju.game.obj.Kaiju;
 public class Banana extends CarryableAdapter{
 
     public Banana() {
-        super("banana", "Speed +1", "Banana", null, Color.YELLOW);
+        super("Banana", "Speed +1", null, Color.YELLOW);
     }
     
     @Override

@@ -19,13 +19,13 @@ public class Main {
         Kaiju[] players;
         try {
             players = new Kaiju[]{
-                new Kaiju("Cristichi", "gummy", 1, 1, 3, 3, "Cristichi",
+                new Kaiju("Cristichi", "gummy", 1, 1, 3, 3,
                     "kaijus/gummy.png", Color.MAGENTA, null, false),
-                new Kaiju("Snail", "snail", 1, 1, 3, 3, "Random Snail",
+                new Kaiju("Snail Bot", "snail", 1, 1, 3, 3,
                     "kaijus/snail.png", Color.BLUE, null, true),
-                new Kaiju("Strong Bot", "strong", 1, 2, 1, 3, "Strengther",
+                new Kaiju("Strong Bot", "strong", 1, 2, 1, 3,
                     "kaijus/robot.png", Color.RED, null, true),
-                new Kaiju("Fast Bot", "fast", 2, 1, 1, 3, "Speeder",
+                new Kaiju("Fast Bot", "fast", 2, 1, 1, 3,
                     "kaijus/robot.png", Color.YELLOW, null, true)
             };
         } catch (ResourceException e) {
@@ -57,7 +57,7 @@ public class Main {
             .build();
 
         Campaign myCampaña = new Campaign.Builder("My campaña", "Cristichi", players)
-            .addGame(new Game(testBoard))
+            .addGame(new Game(board))
             .addGame(new Game(board))
             .addGame(new Game(board))
             .addReward(new TestFactory("Item 1"))
