@@ -45,9 +45,7 @@ public class Campaign extends Thread{
 
             players = games[i].getKaijus();
 
-            if (winner != null){
-                System.out.println("Winner of game: "+games[i].getWinner());
-                
+            if (winner != null){                
                 ArrayList<CarryableFactory<? extends Carryable>> newRewards = new ArrayList<>(MAX_REWARDS);
                 if (rewardPool.length <= MAX_REWARDS){
                     for (CarryableFactory<? extends Carryable> carryableFactory : rewardPool) {
@@ -71,7 +69,6 @@ public class Campaign extends Thread{
                     if (item.isUnique()){
                         CarryableFactory<? extends Carryable>[] newPool = new CarryableFactory<?>[rewardPool.length-1];
                         boolean hit = false;
-                        System.out.println("Item: "+item);
                         for (int j = 0; j < rewardPool.length; j++) {
                             if (hit){
                                 newPool[j-1] = rewardPool[j];

@@ -50,16 +50,24 @@ public class Main {
             .addSquareOfCopies(new Position(2, 6), new Position(4, 6), new Building(0))
             .build();
 
+        Board testBoard = new Board.Builder(3, 3)
+            .addSpawnPoint(new Position(0, 0))
+            .addSpawnPoint(new Position(2, 0))
+            .addSpawnPoint(new Position(0, 2))
+            .addSpawnPoint(new Position(2, 2))
+            .build();
+
         Campaign myCampaña = new Campaign.Builder("My campaña", "Cristichi", players)
+            .addGame(new Game(testBoard))
+            .addGame(new Game(testBoard))
+            .addGame(new Game(testBoard))
+            .addGame(new Game(testBoard))
+            .addGame(new Game(testBoard))
             .addGame(new Game(board))
-            .addGame(new Game(board))
-            .addGame(new Game(board))
-            .addReward(new BananaFactory())
             .addReward(new TestFactory("Item 1"))
             .addReward(new TestFactory("Item 2"))
             .addReward(new TestFactory("Item 3"))
             .addReward(new TestFactory("Item 4"))
-            .addReward(new TestFactory("Item 5"))
             .build();
 
         myCampaña.start();
