@@ -34,7 +34,7 @@ public class Campaign extends Thread{
         for (int i = 0; i<games.length; i++) {
             games[i].setPlayers(players.values(), true);
 
-            KaijuGameWindow window = new KaijuGameWindow(games[i]);
+            KaijuGameWindow window = new KaijuGameWindow(games[i], "Kaiju Fight: %s - Game %d (by %s)".formatted(name, i+1, author));
             window.setSize(1600, 1000);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
@@ -45,7 +45,7 @@ public class Campaign extends Thread{
 
             players = games[i].getKaijus();
 
-            if (winner != null){                
+            if (winner != null && !winner.isCpu()){                
                 ArrayList<CarryableFactory<? extends Carryable>> newRewards = new ArrayList<>(MAX_REWARDS);
                 if (rewardPool.length <= MAX_REWARDS){
                     for (CarryableFactory<? extends Carryable> carryableFactory : rewardPool) {
@@ -58,7 +58,7 @@ public class Campaign extends Thread{
                     }
                 }
 
-                RewardWindow rewardWindow = new RewardWindow(newRewards);
+                RewardWindow rewardWindow = new RewardWindow(newRewards, "Kaiju Fight: %s - Rewards for Game %d".formatted(name, i+1));
                 rewardWindow.setSize(new Dimension(500, 200));
                 rewardWindow.setLocationRelativeTo(null);
                 rewardWindow.setAlwaysOnTop(true);
@@ -84,7 +84,7 @@ public class Campaign extends Thread{
             } else {
                 System.out.println("Winner of game: Nobody!");
 
-                RewardWindow rewardWindow = new RewardWindow();
+                RewardWindow rewardWindow = new RewardWindow("Kaiju Fight: %s - No rewards %d (you lost)".formatted(name, i+1));
                 rewardWindow.setSize(new Dimension(500, 200));
                 rewardWindow.setLocationRelativeTo(null);
                 rewardWindow.setAlwaysOnTop(true);

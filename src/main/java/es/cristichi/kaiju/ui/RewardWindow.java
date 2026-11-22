@@ -20,12 +20,12 @@ public class RewardWindow extends JFrame{
     protected Semaphore windowSem;
     protected CarryableFactory<? extends Carryable> chosen;
     
-    public RewardWindow(){
-        this(new LinkedList<>());
+    public RewardWindow(String title){
+        this(new LinkedList<>(), title);
     }
 
-    public RewardWindow(Collection<CarryableFactory<? extends Carryable>> choices){
-        super("Rewarding time!");
+    public RewardWindow(Collection<CarryableFactory<? extends Carryable>> choices, String title){
+        super(title);
         windowSem = new Semaphore(0);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

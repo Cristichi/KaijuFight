@@ -32,8 +32,8 @@ public class KaijuGameWindow extends JFrame{
     private BoardComponent boardComponent;
     private JPanel attackControls;
 
-    public KaijuGameWindow(Game game){
-        super("Kaiju Fight!");
+    public KaijuGameWindow(Game game, String title){
+        super(title);
         this.game = game;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
