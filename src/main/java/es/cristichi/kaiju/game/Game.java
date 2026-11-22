@@ -86,7 +86,7 @@ public class Game {
         this.kaijus = new HashMap<>(kaijus.size());
         for (Kaiju kaiju : kaijus) {
             if (resetHealth){
-                kaiju.resetHealth();
+                kaiju.resetAfterGame();
             }
             this.kaijus.put(kaiju.getName(), kaiju);
         }
@@ -99,7 +99,7 @@ public class Game {
         this.kaijus = new HashMap<>(kaijus.length);
         for (Kaiju kaiju : kaijus) {
             if (resetHealth){
-                kaiju.resetHealth();
+                kaiju.resetAfterGame();
             }
             this.kaijus.put(kaiju.getName(), kaiju);
         }

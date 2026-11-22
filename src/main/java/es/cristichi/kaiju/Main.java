@@ -10,7 +10,6 @@ import es.cristichi.kaiju.game.obj.Building;
 import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.game.obj.carry.Banana;
-import es.cristichi.kaiju.game.obj.carry.factory.BananaFactory;
 import es.cristichi.kaiju.game.obj.carry.factory.TestFactory;
 
 public class Main {

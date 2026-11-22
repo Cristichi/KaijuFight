@@ -16,6 +16,7 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
     private String species;
     private int speed;
     private int damage;
+    private int startMana;
     private int mana;
     private int startHealth;
     private int health;
@@ -28,6 +29,7 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
         this.species = species;
         this.speed = speed;
         this.damage = damage;
+        this.startMana = mana;
         this.mana = mana;
         this.startHealth = health;
         this.health = health;
@@ -53,8 +55,9 @@ public class Kaiju extends GameObject implements AliveObject, AttackerObject, Ma
         return true;
     }
 
-    public void resetHealth(){
+    public void resetAfterGame(){
         health = startHealth;
+        mana = startMana;
     }
 
     public String getSpecies() {
