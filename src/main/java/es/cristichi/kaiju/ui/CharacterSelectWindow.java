@@ -111,9 +111,9 @@ public class CharacterSelectWindow extends JFrame {
     }
 
     private static enum Archetype {
-        SNAIL("Snail", 1, 1, 3, 3, "kaijus/gummy.png"),
+        SNAIL("Snail", 1, 1, 3, 3, "kaijus/snail.png"),
         STRONG("Strong", 1, 2, 0, 3, "kaijus/robot.png"),
-        ZOOMIES("Zoomies", 2, 1, 1, 3, "kaijus/robot.png"),
+        ZOOMIES("Zoomies", 2, 1, 1, 3, "kaijus/zoomies.png"),
         ;
         private final String speciesName, resourceImgPath;
         private final int speed, damage, mana, health;

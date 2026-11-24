@@ -10,6 +10,7 @@ import es.cristichi.kaiju.game.obj.Building;
 import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.game.obj.carry.Banana;
+import es.cristichi.kaiju.game.obj.carry.factory.BananaFactory;
 import es.cristichi.kaiju.game.obj.carry.factory.TestFactory;
 import es.cristichi.kaiju.ui.CharacterSelectWindow;
 
@@ -23,7 +24,7 @@ public class Main {
             new Kaiju("Strong Bot", "strong", 1, 2, 0, 3,
                 "kaijus/robot.png", Color.RED, null, true),
             new Kaiju("Fast Bot", "fast", 2, 1, 1, 3,
-                "kaijus/robot.png", Color.YELLOW, null, true)
+                "kaijus/zoomies.png", Color.YELLOW, null, true)
         };
 
         Board board1 = new Board.Builder(7, 7)
@@ -50,10 +51,11 @@ public class Main {
             .addObject(new Position(2, 2), new Kaiju("Boss", "cosa mala", 6, 3, 0, 6, null, Color.RED, null, true))
             .build();
 
-        Campaign myCampaña = new Campaign.Builder("My campaña", "Cristichi", players)
+        Campaign myCampaña = new Campaign.Builder("Basic Custom Campaign", "Cristichi", players)
             .addGame(new Game(board1))
             .addGame(new Game(board1))
             .addGame(new Game(boardBoss))
+            .addReward(new BananaFactory())
             .addReward(new TestFactory("Item 1"))
             .addReward(new TestFactory("Item 2"))
             .addReward(new TestFactory("Item 3"))
