@@ -11,14 +11,13 @@ import es.cristichi.kaiju.game.obj.Kaiju;
 import es.cristichi.kaiju.game.obj.Position;
 import es.cristichi.kaiju.game.obj.carry.Banana;
 import es.cristichi.kaiju.game.obj.carry.factory.TestFactory;
+import es.cristichi.kaiju.ui.CharacterSelectWindow;
 
 public class Main {
     public static void main(String[] args) throws ResourceException {
         System.out.println("Kaiju game starting. Check the window.");
         
         Kaiju[] players = new Kaiju[]{
-            new Kaiju("Cristichi", "gummy", 1, 1, 3, 3,
-                "kaijus/gummy.png", Color.MAGENTA, null, false),
             new Kaiju("Snail Bot", "snail", 1, 1, 3, 3,
                 "kaijus/snail.png", Color.BLUE, null, true),
             new Kaiju("Strong Bot", "strong", 1, 2, 0, 3,
@@ -61,6 +60,14 @@ public class Main {
             .addReward(new TestFactory("Item 4"))
             .addReward(new TestFactory("Item 5"))
             .build();
+
+        
+        CharacterSelectWindow characterSelectWindow = new CharacterSelectWindow("Select your character");
+        characterSelectWindow.setSize(500, 400);
+        characterSelectWindow.setLocationRelativeTo(null);
+        characterSelectWindow.setVisible(true);
+        Kaiju character = characterSelectWindow.waitForCharacter();
+        myCampaña.addPlayer(character);
 
         myCampaña.start();
     }

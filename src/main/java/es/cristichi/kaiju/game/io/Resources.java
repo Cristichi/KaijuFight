@@ -33,4 +33,23 @@ public class Resources {
                             .formatted(resourcePath), e);
         }
     }
+
+    /**
+     * Loads a non-binary from the resources as a String.
+     * @param resourcePath Path inside the resources folder.
+     * @return A String with the content of the file
+     * @throws ResourceException If the file does not exist, or any other error during reading.
+     */
+    public static String loadContent(String resourcePath) throws ResourceException {
+        try (InputStream in = Resources.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (in == null){
+                throw new NullPointerException("Resource not found.");
+            }
+            return new String(in.readAllBytes());
+        } catch (IOException | NullPointerException e) {
+            throw new ResourceException(
+                    "Resource not found at \"%s\". Cristichi or otherwise the modder probably forgot to add it."
+                            .formatted(resourcePath), e);
+        }
+    }
 }

@@ -30,6 +30,13 @@ public class Campaign extends Thread{
         this.rewardPool = rewardPool;
     }
 
+    public void addPlayer(Kaiju player){
+        if (isAlive()){
+            throw new IllegalThreadStateException("You can't modify that during the game from outside.");
+        }
+        players.put(player.getName(), player);
+    }
+
     @Override
     public void run() {
         for (int i = 0; i<games.length; i++) {
